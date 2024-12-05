@@ -157,6 +157,6 @@ chmod 666 /home/nodo/variables/config.json
 
 hostname Nodo-N6
 
-putvar 'i2p_port' '18081'
+putvar 'i2p_port' '18085'
 sleep 5
 bash /home/nodo/setup-domains.sh

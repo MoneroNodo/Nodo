@@ -48,7 +48,7 @@ get_release_commit() {
 	}
 
 get_ip() {
-	ip route get 1.1.1.1 | sed -n '/src/{s/.*src *\([^ ]*\).*/\1/p;q}'
+	ip route get 9.9.9.9 | sed -n '/src/{s/.*src *\([^ ]*\).*/\1/p;q}'
 }
 
 check_connection() {

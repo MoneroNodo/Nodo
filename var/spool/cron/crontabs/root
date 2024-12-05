@@ -1,1 +1,3 @@
-*/30 * * * * bash /home/nodo/update-all.sh
+*/30 * * * * bash /home/nodo/update-all.sh 
+# is this the correct location?
+# every 30 min aeems a bit much

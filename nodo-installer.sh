@@ -90,7 +90,7 @@ sleep 3
 swapfile=/media/monero/swap
 sleep 1
 showtext "Setting up swap on $swapfile"
-dd if=/dev/zero of="$swapfile" bs=1M count=1024 conv=sync
+dd if=/dev/zero of="$swapfile" bs=1M count=10240
 mkswap "$swapfile"
 printf '%s none swap defaults 0 0' "$swapfile" | tee -a /etc/fstab
 swapon "$swapfile"

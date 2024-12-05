@@ -47,34 +47,36 @@ fi
 	if [ "$BOOT_STATUS" -eq 3 ] || [ "$BOOT_STATUS" -eq 5 ]
 then
 		#Node Status
-			PRINT_PL="$(./monero/build/release/bin/monerod --rpc-bind-ip="${DEVICE_IP}" --rpc-bind-port="${MONERO_PORT}" --rpc-login="${RPCu}:${RPCp}" --rpc-ssl disabled print_pl | sed '1d' | sed 's/\x1b\[[0-9;]*m//g')" && echo "$PRINT_PL" > /var/www/html/print_pl.txt;
+			PRINT_PL="$(./monero/build/release/bin/monerod ${RPCu:+--rpc-login="${RPCu}:${RPCp}"} print_pl | sed '1d' | sed 's/\x1b\[[0-9;]*m//g')" && echo "$PRINT_PL" > /var/www/html/print_pl.txt;
 			date >> /var/www/html/print_pl.txt
 fi
 
 	if [ "$BOOT_STATUS" -eq 4 ]
 then
 #Adapted command for tor rpc calls (payments) - RPC port and IP fixed due to tor hidden service settings linked in /etc/tor/torrc
-			PRINT_PL="$(./monero/build/release/bin/monerod --rpc-bind-ip="${DEVICE_IP}" --rpc-bind-port=18081 --rpc-login="${RPCu}:${RPCp}" --rpc-ssl disabled print_pl | sed '1d' | sed 's/\x1b\[[0-9;]*m//g')" && echo "$PRINT_PL" > /var/www/html/print_pl.txt;
+			PRINT_PL="$(./monero/build/release/bin/monerod ${RPCu:+--rpc-login="${RPCu}:${RPCp}"} print_pl | sed '1d' | sed 's/\x1b\[[0-9;]*m//g')" && echo "$PRINT_PL" > /var/www/html/print_pl.txt;
 			date >> /var/www/html/print_pl.txt
 fi
 
 	if [ "$BOOT_STATUS" -eq 5 ]
 then
 		#Adapted command for restricted public rpc calls (payments)
-			PRINT_PL="$(./monero/build/release/bin/monerod --rpc-bind-ip="$DEVICE_IP" --rpc-bind-port="$MONERO_PORT" --rpc-ssl disabled print_pl | sed '1d' | sed 's/\x1b\[[0-9;]*m//g')" && echo "$PRINT_PL" > /var/www/html/print_pl.txt;
+			PRINT_PL="$(./monero/build/release/bin/monerod ${RPCu:+--rpc-login="${RPCu}:${RPCp}"} print_pl | sed '1d' | sed 's/\x1b\[[0-9;]*m//g')" && echo "$PRINT_PL" > /var/www/html/print_pl.txt;
 			date >> /var/www/html/print_pl.txt
 fi
 
 	if [ "$BOOT_STATUS" -eq 6 ]
 then
-		#Adapted command for public free (restricted) rpc calls. No auth needed for local.
-			PRINT_PL="$(./monero/build/release/bin/monerod --rpc-bind-ip="$DEVICE_IP" --rpc-bind-port="$MONERO_PUBLIC_PORT" --rpc-ssl disabled print_pl | sed '1d' | sed 's/\x1b\[[0-9;]*m//g')" && echo "$PRINT_PL" > /var/www/html/print_pl.txt;
+		#TODO: Delete? you cant print_pl over restricted
+		#Adapted command for public free (restricted) rpc calls. No auth needed for local >> is auth is set, it is needed for for restricte and unrestricted
+			PRINT_PL="$(./monero/build/release/bin/monerod ${RPCu:+--rpc-login="${RPCu}:${RPCp}"} print_pl | sed '1d' | sed 's/\x1b\[[0-9;]*m//g')" && echo "$PRINT_PL" > /var/www/html/print_pl.txt;
 			date >> /var/www/html/print_pl.txt
 fi
 	if [ "$BOOT_STATUS" -eq 7 ]
 then
 		#Node Status
-			PRINT_PL="$(./monero/build/release/bin/monerod --rpc-bind-ip="$DEVICE_IP" --rpc-bind-port="$MONERO_PORT" --rpc-login="${RPCu}:${RPCp}" --rpc-ssl disabled print_pl | sed '1d' | sed 's/\x1b\[[0-9;]*m//g')" && echo "$PRINT_PL" > /var/www/html/print_pl.txt;
+		# this is the same command again?
+			PRINT_PL="$(./monero/build/release/bin/monerod ${RPCu:+--rpc-login="${RPCu}:${RPCp}"} print_pl | sed '1d' | sed 's/\x1b\[[0-9;]*m//g')" && echo "$PRINT_PL" > /var/www/html/print_pl.txt;
 			date >> /var/www/html/print_pl.txt
 fi
 

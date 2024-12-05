@@ -3,5 +3,5 @@ ControlPort 9051
 CookieAuthentication 1
 HiddenServiceDir /var/lib/tor/hidden_service/
 HiddenServicePort 18089 127.0.0.1:18089
-HiddenServicePort 18083 127.0.0.1:18081
+HiddenServicePort 18084 127.0.0.1:18084
 HiddenServicePort 8135  127.0.0.1:8135

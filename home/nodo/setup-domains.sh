@@ -32,7 +32,8 @@ until test -f /var/lib/i2pd/nasXmr.dat; do
 	sleep 1
 done
 
+# TODO: these can all use the same variable.
 putvar 'i2p_address' $(printf "%s.b32.i2p" "$(head -c 391 /var/lib/i2pd/nasXmr.dat | sha256sum | xxd -r -p | base32 | sed s/=//g | tr A-Z a-z)")
-putvar 'i2p_b32_addr_rpc' $(printf "%s.b32.i2p" "$(head -c 391 /var/lib/i2pd/nasXmrRpc.dat | sha256sum | xxd -r -p | base32 | sed s/=//g | tr A-Z a-z)")
-putvar 'i2p_b32_addr_lws' $(printf "%s.b32.i2p" "$(head -c 391 /var/lib/i2pd/nasXmrLws.dat | sha256sum | xxd -r -p | base32 | sed s/=//g | tr A-Z a-z)")
+putvar 'i2p_b32_addr_rpc' $(printf "%s.b32.i2p" "$(head -c 391 /var/lib/i2pd/nasXmr.dat | sha256sum | xxd -r -p | base32 | sed s/=//g | tr A-Z a-z)")
+putvar 'i2p_b32_addr_lws' $(printf "%s.b32.i2p" "$(head -c 391 /var/lib/i2pd/nasXmr.dat | sha256sum | xxd -r -p | base32 | sed s/=//g | tr A-Z a-z)")
 
