@@ -87,25 +87,6 @@ showtext "Configuring apache server for access to Monero log file..."
 	systemctl restart apache2
 } 2>&1 | tee -a "$DEBUG_LOG"
 
-##Install log.io (Real-time service monitoring)
-#Establish Device IP
-DEVICE_IP=$(getip)
-showtext "Installing log.io..."
-
-{
-	npm install -g log.io
-	npm install -g log.io-file-input
-	mkdir -p ~/.log.io/inputs/
-	cp "$_cwd"/.log.io/inputs/file.json ~/.log.io/inputs/file.json
-	cp "$_cwd"/.log.io/server.json ~/.log.io/server.json
-	sed -i "s/127.0.0.1/$DEVICE_IP/g" ~/.log.io/server.json
-	sed -i "s/127.0.0.1/$DEVICE_IP/g" ~/.log.io/inputs/file.json
-	systemctl start log-io-server.service
-	systemctl start log-io-file.service
-	systemctl enable log-io-server.service
-	systemctl enable log-io-file.service
-} 2>&1 | tee -a "$DEBUG_LOG"
-
 #Attempt update of tor hidden service settings
 {
 	if [ -f /usr/bin/tor ]; then #Crude way of detecting tor installed
@@ -150,6 +131,7 @@ chmod o+rx /home/nodo/execScripts
 chmod 666 /home/nodo/variables/config.json
 
 hostname Nodo-N6
+sed -i 's/NanoPC-T6N/Nodo-N6/g'
 
 if [ ! -d /opt/moneropay ]; then  # setup moneropay wallet dir
 	adduser --system --group moneropay
