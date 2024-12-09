@@ -10,7 +10,7 @@ fi
 . /home/nodo/common.sh
 cd /home/nodo || exit 1
 
-OLD_VERSION_EXP="${1:-$(getvar "versions.pay")}"
+OLD_VERSION_EXP="${1:-$(getvar "versions.exp")}"
 
 RELEASE=$(gitlab_get_tag_commit "moneropay" "moneropay")
 #RELEASE=2d8478c
