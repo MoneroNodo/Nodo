@@ -145,6 +145,18 @@ systemctl disable --now bluetooth
 sudo -u nodo pipx uninstall libretranslate
 sudo -u nodo rm -rf /home/nodo/.local/share/argos-translate
 
+
+_tz="$(getvar 'timezone')"
+if [ "$_tz" = "Europe/London" ]; then
+	putvar 'timezone' 'GMT'
+	systemctl restart nodoUI
+fi
+
+if [ "$_tz" = "Europe/Berlin" ]; then
+	putvar 'timezone' 'CET'
+	systemctl restart nodoUI
+fi
+
 putvar 'zmq_pub' '18083'
 putvar 'tor_port' '18084'
 putvar 'i2p_port' '18085'
