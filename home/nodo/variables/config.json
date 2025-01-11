@@ -37,6 +37,7 @@
 		"rpc_enabled": "FALSE",
 		"rpcp": "password",
 		"rpcu": "nodo",
+		"anon_rpc": "FALSE",
 		"data_dir": "/media/monero/bitmonero",
 		"sync_mode": "fast:async",
 		"night_mode": false,
