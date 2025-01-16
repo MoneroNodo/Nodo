@@ -30,7 +30,7 @@ if ! check_connection; then
 	exit 1
 fi
 
-timediff="${1:-86400}"
+timediff="${1:-3600}"
 if [ "$(getvar last_update)" = "null" ] || [ "$timediff" -le "1" ] || [ "$(getvar last_update)" -le "$(($(date +%s) - timediff))" ]; then
 	putvar last_update "$(date +%s)"
 	printf '%s\n' "Checking for updates"
