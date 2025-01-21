@@ -6,33 +6,50 @@ DEBUG_LOG=/root/debug.log
 CONFIG_FILE=/home/nodo/variables/config.json
 XMRPARTLABEL="NODO_BLOCKCHAIN"
 
-gitlab_get_tag_commit() {
+gitlab_get_tag_commit_name() {
 	project="$(printf '%s' "$1" | sed 's/./\L&/g')"
 	repo="$(printf '%s' "$2" | sed 's/./\L&/g')"
 	githost="${3:-gitlab.com}"
-	tag=$(curl -ls "https://$githost/api/v4/projects/$project%2F$repo/repository/tags" | jq -r '.[0].commit.id')
+	tag=$(curl -ls "https://$githost/api/v4/projects/$project%2F$repo/repository/tags" | jq -r '.[0].commit.id, .[0].name')
 	printf '%s' "$tag"
 }
 
-gitlab_get_release_commit() {
+gitlab_get_release_commit_name() {
 	project="$(printf '%s' "$1" | sed 's/./\L&/g')"
 	repo="$(printf '%s' "$2" | sed 's/./\L&/g')"
 	githost="${3:-gitlab.com}"
-	tag=$(curl -ls "https://$githost/api/v4/projects/$project%2F$repo/releases" | jq -r '.[0].commit.id')
+	tag=$(curl -ls "https://$githost/api/v4/projects/$project%2F$repo/releases" | jq -r '.[0].commit.id, .[0].name')
 	printf '%s' "$tag"
 }
 
-get_tag_commit() {
+gitlab_get_tag_name_from_commit() {
 	project="$1"
 	repo="$2"
-	tag=$(curl -ls "https://api.github.com/repos/$project/$repo/tags" | jq -r '.[0].commit.sha')
+	commit="$3"
+	githost="${4:-gitlab.com}"
+	tag="$(curl -ls "https://$githost/api/v4/projects/$project%2F$repo/releases" | jq -r "$(printf '.[] | select(.commit.id | contains("%s")) | .name' "$commit")")"
 	printf '%s' "$tag"
 }
 
-get_release_commit() {
+get_tag_name_from_commit() {
 	project="$1"
 	repo="$2"
-	tag=$(curl -ls "https://api.github.com/repos/$project/$repo/releases/latest" | jq -r '.tag_name')
+	commit="$3"
+	tag="$(curl -ls "https://api.github.com/repos/$project/$repo/tags" | jq -r "$(printf '.[] | select(.commit.sha | contains("%s")) | .name' "$commit")")"
+	printf '%s' "$tag"
+}
+
+get_tag_commit_name() {
+	project="$1"
+	repo="$2"
+	tag=$(curl -ls "https://api.github.com/repos/$project/$repo/tags" | jq -r '.[0].commit.sha, .[0].name')
+	printf '%s' "$tag"
+}
+
+get_release_commit_name() {
+	project="$1"
+	repo="$2"
+	tag=$(curl -ls "https://api.github.com/repos/$project/$repo/releases/latest" | jq -r '.tag_name, .[0].name')
 	{
 		read -r type
 		read -r tag_sha
@@ -40,12 +57,44 @@ get_release_commit() {
 		if [ "$type" == "commit" ]; then
 			printf "%s" "$tag_sha"
 		else
-			sha=$(curl -s "https://api.github.com/repos/$project/$repo/git/tags/$tag_sha" | jq -r '.object.sha')
+			sha=$(curl -s "https://api.github.com/repos/$project/$repo/git/tags/$tag_sha" | jq -r '.object.sha, .[0].name')
 			printf "%s" "$sha"
 		fi
 	} < <(curl -s "https://api.github.com/repos/$project/$repo/git/ref/tags/$tag" |
 		jq -r '.object.type,.object.sha')
-	}
+}
+
+get_release_name() {
+	get_release_commit_name "$@" | tail -n1
+}
+
+get_tag_name() {
+	get_tag_commit_name "$@" | tail -n1
+}
+
+gitlab_get_tag_name() {
+	gitlab_get_tag_commit_name "$@" | tail -n1
+}
+
+gitlab_get_release_name() {
+	gitlab_get_release_commit_name "$@" | tail -n1
+}
+
+get_release_commit() {
+	get_release_commit_name "$@" | head -n1
+}
+
+get_tag_commit() {
+	get_tag_commit_name "$@" | head -n1
+}
+
+gitlab_get_tag_commit() {
+	gitlab_get_tag_commit_name "$@" | head -n1
+}
+
+gitlab_get_release_commit() {
+	gitlab_get_release_commit_name "$@" | head -n1
+}
 
 get_ip() {
 	ip route get 9.9.9.9 | sed -n '/src/{s/.*src *\([^ ]*\).*/\1/p;q}'

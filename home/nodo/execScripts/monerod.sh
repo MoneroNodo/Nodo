@@ -16,6 +16,7 @@ read -r LIMIT_RATE_UP
 read -r LIMIT_RATE_DOWN
 read -r DATA_DIR
 read -r TORPROXY_ENABLED
+read -r CLEARNET_ENABLED
 read -r I2P_ENABLED
 read -r I2P_PORT
 read -r I2P_ADDRESS
@@ -29,12 +30,16 @@ read -r BANLIST_BOOG900_ENABLED
 read -r BANLIST_GUIXMRPM_ENABLED
 read -r BANLIST_DNS
 } < <(
-	jq '.config | .monero_port, .monero_public_port, .rpc_enabled, .monero_rpc_port, .rpcu, .rpcp, .in_peers, .out_peers, .limit_rate_up, .limit_rate_down, .data_dir, .torproxy_enabled, .i2p_enabled, .i2p_port, .i2p_address, .tor_enabled, .tor_port, .tor_address, .data_dir, .sync_mode, .zmq_pub, .banlists.boog900, .banlists."gui-xmr-pm", .banlists.dns' $CONFIG_FILE
+	jq '.config | .monero_port, .monero_public_port, .rpc_enabled, .monero_rpc_port, .rpcu, .rpcp, .in_peers, .out_peers, .limit_rate_up, .limit_rate_down, .data_dir, .torproxy_enabled, .clearnet_enabled, .i2p_enabled, .i2p_port, .i2p_address, .tor_enabled, .tor_port, .tor_address, .data_dir, .sync_mode, .zmq_pub, .banlists.boog900, .banlists."gui-xmr-pm", .banlists.dns' $CONFIG_FILE
 )
 
-DEVICE_IP="0.0.0.0"
-
 #Start Monerod
+if [ "$CLEARNET_ENABLED" == "TRUE" ]; then
+	DEVICE_IP="0.0.0.0"
+else
+	DEVICE_IP="127.0.0.1"
+fi
+
 if [ "$TORPROXY_ENABLED" == "TRUE" ]; then
 	cln_flags="--proxy=127.0.0.1:9050 "
 fi

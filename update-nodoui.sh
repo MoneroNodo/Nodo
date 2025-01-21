@@ -13,7 +13,9 @@ cd /home/nodo || exit 1
 OLD_VERSION_EUI="${1:-$(getvar "versions.nodoui")}"
 
 
-RELEASE=$(get_tag_commit "moneronodo" "nodoui")
+RELNAME=$(get_tag_commit_name "moneronodo" "nodoui")
+RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
+_NAME="$(printf '%s' "$RELNAME" | tail -n1)"
 
 if [ -z "$RELEASE" ] && [ -z "$FIRSTINSTALL" ]; then # Release somehow not set or empty
 	showtext "Failed to check for update for Nodo UI"
@@ -49,6 +51,7 @@ showtext "Downloading Nodo UI"
 	showtext "Building Nodo UI"
 	bash ./install.sh || exit 1
 	putvar "versions.nodoui" "$RELEASE" || exit 1
+	putvar "versions.names.nodoui" "$_NAME"
 	cd || exit
 	remove
 } 2>&1 | tee -a "$DEBUG_LOG"

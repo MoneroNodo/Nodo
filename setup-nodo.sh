@@ -142,6 +142,8 @@ fi
 
 systemctl disable --now bluetooth
 
+userdel -fr pi
+
 sudo -u nodo pipx uninstall libretranslate
 sudo -u nodo rm -rf /home/nodo/.local/share/argos-translate
 

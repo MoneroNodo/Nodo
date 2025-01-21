@@ -12,7 +12,10 @@ cd /home/nodo || exit 1
 
 OLD_VERSION_EXP="${1:-$(getvar "versions.pay")}"
 
-RELEASE=$(gitlab_get_tag_commit "moneropay" "moneropay")
+RELNAME=$(gitlab_get_tag_commit_name "moneropay" "moneropay")
+RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
+_NAME="$(printf '%s' "$RELNAME" | tail -n1)"
+
 #RELEASE=2d8478c
 
 if [ -z "$RELEASE" ] && [ -z "$FIRSTINSTALL" ]; then # Release somehow not set or empty
@@ -43,7 +46,8 @@ touch "$DEBUG_LOG"
 	apt install -t bookworm-backports --upgrade golang-go
 	git checkout "$RELEASE"
 	go build -o moneropay cmd/moneropay/main.go || exit 1
-	putvar "versions.exp" "$RELEASE" || exit 1
+	putvar "versions.pay" "$RELEASE" || exit 1
+	putvar "versions.names.pay" "$_NAME"
 	cp moneropay /home/nodo/bin/ || exit 1
 	cp -r db /home/nodo/execScripts/ || exit 1
 	cd || exit

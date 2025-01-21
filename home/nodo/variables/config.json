@@ -12,7 +12,6 @@
 		"credits": 250,
 		"difficulty": 1000,
 		"htmlpasswordrequired": "FALSE",
-		"torproxy_enabled": "FALSE",
 		"tor_global_enabled": "FALSE",
 		"tor_enabled": "TRUE",
 		"tor_address": "",

@@ -12,7 +12,10 @@ fi
 OLD_VERSION_NODO="${1:-$(getvar "versions.nodo")}"
 touch "$DEBUG_LOG"
 
-RELEASE="$(get_tag_commit "moneronodo" "nodo")"
+RELNAME="$(get_tag_commit_name "moneronodo" "nodo")"
+
+RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
+_NAME="$(printf '%s' "$RELNAME" | tail -n1)"
 
 if [ -z "$RELEASE" ]; then # Release somehow not set or empty
 	showtext "Failed to check for update for Nodo"
@@ -80,6 +83,7 @@ showtext "User configuration restored"
 {
 	showtext "Updating system version number..."
 	putvar "versions.nodo" "$RELEASE"
+	putvar "versions.names.nodo" "$_NAME"
 	#ubuntu /dev/null odd requiremnt to set permissions
 	chmod 777 /dev/null
 } 2>&1 | tee -a "$DEBUG_LOG"

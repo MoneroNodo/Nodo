@@ -11,7 +11,10 @@ fi
 . /home/nodo/common.sh
 OLD_VERSION_LWS="${1:-$(getvar "versions.lws")}"
 
-RELEASE="$(curl -fs https://raw.githubusercontent.com/MoneroNodo/Nodo/master/release-monero-lws.txt)"
+RELNAME="e09d3d57e9f88cb47702976965bd6e1ed813c07f
+e09d3d57"
+RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
+_NAME="$(printf '%s' "$RELNAME" | tail -n1)"
 
 if [ -z "$RELEASE" ] && [ -z "$FIRSTINSTALL" ]; then # Release somehow not set or empty
 	showtext "Failed to check for update for LWS"
@@ -50,6 +53,7 @@ showtext "Downloading VTNerd Monero-LWS"
 	make -j"$(nproc --ignore=2)" || exit 1
 	cp src/monero-lws* /home/nodo/bin/ || exit 1
 	putvar "versions.lws" "$RELEASE" || exit 1
+	putvar "versions.names.lws" "$_NAME"
 	cd || exit
 	rm -rf /home/nodo/monero-lws
 } 2>&1 | tee -a "$DEBUG_LOG"

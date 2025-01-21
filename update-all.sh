@@ -10,6 +10,14 @@ remlockfile() {
 	rm -f "$_lockfile"
 }
 
+if [ "$(jq '.config.versions | has("names")' < /home/nodo/variables/config.json)" = "false" ]; then
+	putvar 'versions.names.nodo' "$(get_tag_name_from_commit "moneronodo" "nodo" "$(getvar "versions.nodo")")"
+	# putvar 'versions.names.lws' "$(get_tag_name_from_commit "moneronodo" "nodo" "$(getvar "versions.nodo")")"
+	putvar 'versions.names.pay' "$(get_tag_name_from_commit "moneropay" "moneropay" "$(getvar "versions.pay")")"
+	putvar 'versions.names.monero' "$(get_tag_name_from_commit "monero-project" "monero" "$(getvar "versions.monero")")"
+	putvar 'versions.names.nodoui' "$(get_tag_name_from_commit "moneronodo" "nodoui" "$(getvar "versions.nodoui")")"
+fi
+
 if [ ! "$EUID" = "0" ]; then
 	printf '%s\n' "Not root, can't update"
 	exit 1
@@ -43,15 +51,21 @@ trap remlockfile INT HUP EXIT
 
 touch "$_lockfile"
 
+ALL_PROXY=
+if [ "$(getvar tor_global_enabled)" = "TRUE" ]; then
+	ALL_PROXY=socks5h://127.0.0.1:9050
+fi
+export ALL_PROXY
+
 bash /home/nodo/update-nodo.sh
 cd /home/nodo || exit 1
 chown nodo:nodo -R nodoui monero monero-lws
 mkdir -p /home/nodo/bin
 chown nodo:nodo /home/nodo/bin
 success=0
-sudo -u nodo bash /home/nodo/update-pay.sh && success=1
-sudo -u nodo bash /home/nodo/update-monero.sh && \
-sudo -u nodo bash /home/nodo/update-monero-lws.sh && success=1 # LWS depends on Monero codebase
+sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-pay.sh && success=1
+sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-monero.sh && \
+sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-monero-lws.sh && success=1 # LWS depends on Monero codebase
 bash /home/nodo/update-nodoui.sh && success=1
 
 # Restart services afterwards,

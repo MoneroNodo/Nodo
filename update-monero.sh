@@ -17,7 +17,9 @@ OLD_VERSION="${1:-$(getvar "versions.monero")}"
 #Error Log:
 touch "$DEBUG_LOG"
 
-RELEASE=$(get_release_commit "monero-project" "monero")
+RELNAME=$(get_release_commit_name "monero-project" "monero")
+RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
+_NAME="$(printf '%s' "$RELNAME" | tail -n1)"
 
 if [ -z "$RELEASE" ] && [ -z "$FIRSTINSTALL" ]; then # Release somehow not set or empty
 	showtext "Failed to check for update for Monero"
@@ -53,6 +55,7 @@ showtext "Building Monero..."
 	chmod a+x /home/nodo/bin/monero* || exit 1
 	services-start
 	putvar "versions.monero" "$RELEASE" || exit 1
+	putvar "versions.names.monero" "$_NAME"
 } 2>&1 | tee -a "$DEBUG_LOG"
 
 # Monero codebase needs to stay because LWS depends on it
