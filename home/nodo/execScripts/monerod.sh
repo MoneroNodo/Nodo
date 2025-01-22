@@ -34,9 +34,8 @@ read -r BANLIST_DNS
 )
 
 #Start Monerod
-if [ "$CLEARNET_ENABLED" == "TRUE" ]; then
-	DEVICE_IP="0.0.0.0"
-else
+DEVICE_IP="0.0.0.0"
+if [ "$CLEARNET_ENABLED" == "FALSE" ]; then
 	DEVICE_IP="127.0.0.1"
 fi
 
