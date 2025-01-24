@@ -33,6 +33,7 @@
 		"out_peers": 32,
 		"in_peers": 64,
 		"payment_address": "",
+		"anon_rpc": "FALSE",
 		"rpc_enabled": "FALSE",
 		"rpcp": "password",
 		"rpcu": "nodo",
