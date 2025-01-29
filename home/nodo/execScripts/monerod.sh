@@ -55,7 +55,7 @@ if [ "$TOR_ENABLED" == "TRUE" ]; then
 fi
 
 if [ "$RPC_ENABLED" == "TRUE" ]; then
-	rpc_args="${RPCu:+--rpc-login=$RPCu:$RPCp} "
+	rpc_args="${RPCu:+--rpc-login=\$RPCu:\$RPCp} "
 fi
 
 if [ "$BANLIST_BOOG900_ENABLED" == "TRUE" ] || [ "$BANLIST_GUIXMRPM_ENABLED" == "TRUE" ]; then
