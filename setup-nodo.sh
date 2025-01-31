@@ -165,5 +165,5 @@ putvar 'lws_port' '18086'
 putvar 'monero_port' '18080'
 putvar 'monero_public_port' '18081'
 putvar 'monero_rpc_port' '18089'
-sleep 5
-#bash /home/nodo/setup-domains.sh
+kill -HUP "$(pidof tor)"
+kill -HUP "$(pidof i2pd)"

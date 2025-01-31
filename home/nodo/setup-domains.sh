@@ -4,13 +4,15 @@
 
 rm -rf /var/lib/tor/hidden_service
 rm -rf /var/lib/tor/ssh
+kill -HUP "$(pidof tor)"
 sleep 1
 kill -HUP "$(pidof tor)"
 sleep 1
+kill -HUP "$(pidof tor)"
 tries=0
 until test -f /var/lib/tor/hidden_service/hostname; do
 	tries=$((tries + 1))
-	if [ $tries -ge 10 ]; then
+	if [ $tries -ge 20 ]; then
 		exit 1
 	fi
 	sleep 1
@@ -22,13 +24,15 @@ test -f /var/lib/tor/ssh/hostname && putvar 'tor_ssh_address' "$(cat /var/lib/to
 rm -f /var/lib/i2pd/nasXmr.dat
 rm -f /var/lib/i2pd/nasXmrRpc.dat
 rm -f /var/lib/i2pd/nasXmrLws.dat
+kill -HUP "$(pidof i2pd)"
 sleep 1
 kill -HUP "$(pidof i2pd)"
 sleep 1
+kill -HUP "$(pidof i2pd)"
 tries=0
 until test -f /var/lib/i2pd/nasXmr.dat; do
 	tries=$((tries + 1))
-	if [ $tries -ge 10 ]; then
+	if [ $tries -ge 20 ]; then
 		exit 1
 	fi
 	sleep 1
