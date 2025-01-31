@@ -1,7 +1,7 @@
 {
 	"config": {
 		"banlists": {
-			"boog900": "TRUE",
+			"boog900": "FALSE",
 			"gui-xmr-pm": "FALSE",
 			"dns": "FALSE"
 		},
