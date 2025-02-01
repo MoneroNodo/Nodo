@@ -49,7 +49,7 @@ get_tag_commit_name() {
 get_release_commit_name() {
 	project="$1"
 	repo="$2"
-	tag=$(curl -ls "https://api.github.com/repos/$project/$repo/releases/latest" | jq -r '.tag_name, .[0].name')
+	tag=$(curl -ls "https://api.github.com/repos/$project/$repo/releases/latest" | jq -r '.tag_name')
 	{
 		read -r type
 		read -r tag_sha
@@ -57,9 +57,10 @@ get_release_commit_name() {
 		if [ "$type" == "commit" ]; then
 			printf "%s" "$tag_sha"
 		else
-			sha=$(curl -s "https://api.github.com/repos/$project/$repo/git/tags/$tag_sha" | jq -r '.object.sha, .[0].name')
+			sha=$(curl -s "https://api.github.com/repos/$project/$repo/git/tags/$tag_sha" | jq -r '.object.sha')
 			printf "%s" "$sha"
 		fi
+		printf "\n%s" "$tag"
 	} < <(curl -s "https://api.github.com/repos/$project/$repo/git/ref/tags/$tag" |
 		jq -r '.object.type,.object.sha')
 }
