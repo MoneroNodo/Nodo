@@ -6,4 +6,4 @@
 DATA_DIR=$(getvar "data_dir")/light_wallet_server
 PORT=8135
 
-eval "/home/nodo/bin/monero-lws-daemon --daemon tcp://127.0.0.1:18082 --db-path $DATA_DIR --admin-rest-server http://127.0.0.1:${PORT}/admin --rest-server http://127.0.0.1:${PORT}/basic"
+eval "/home/nodo/bin/monero-lws-daemon --daemon tcp://127.0.0.1:18082 --db-path $DATA_DIR --admin-rest-server http://127.0.0.1:${PORT}/admin --rest-server http://127.0.0.1:${PORT}/basic --auto-accept-creation"
