@@ -76,4 +76,8 @@ if [ 1 -eq $success ]; then
 	services-start
 fi
 
+if [ "" = "$(getvar 'tor_address')" ] || [ "" = "$(getvar 'i2p_address')" ]; then
+	bash /home/nodo/setup-domains.sh
+fi
+
 remlockfile
