@@ -183,14 +183,14 @@ log() {
 services="monerod monero-lws monero-wallet-rpc moneropay"
 services-stop() {
 	for f in $services; do
-		systemctl stop "$f".service
+		sudo systemctl stop "$f".service
 	done
 }
 
 services-start() {
 	for f in $services; do
 		if systemctl is-enabled "$f".service; then
-			systemctl start "$f".service
+			sudo systemctl start "$f".service
 		fi
 	done
 }
