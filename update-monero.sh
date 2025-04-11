@@ -3,7 +3,8 @@
 UPD="$(jq -r '.config.autoupdate.monero' /home/nodo/variables/config.json)"
 
 if [ "$UPD" = "FALSE" ] && [ -z "$1" ]; then
-	return 0
+	echo "INFO : automatic monero updates disabled"
+	exit 0
 fi
 
 #shellcheck source=home/nodo/common.sh
