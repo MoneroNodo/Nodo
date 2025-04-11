@@ -152,7 +152,11 @@ fi
 
 systemctl disable --now bluetooth
 
-userdel -fr pi
+# delete old "pi" user
+pi_user=$(grep pi /etc/passwd)
+if [[ -n "${pi_user}" ]]; then
+	userdel -fr pi
+fi
 
 sudo -u nodo pipx uninstall libretranslate
 sudo -u nodo rm -rf /home/nodo/.local/share/argos-translate
