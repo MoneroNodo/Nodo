@@ -1,2 +1,2 @@
-nodo ALL=(ALL) NOPASSWD: /usr/bin/systemctl ^(start|stop) (monerod|monero-lws|monero-wallet-rpc|moneropay)(.service)?( (monerod|monero-lws|monero-wallet-rpc|moneropay)(.service)?)*$
+nodo ALL=(ALL) NOPASSWD: /usr/bin/systemctl ^(start|stop)( (monerod|monero-lws|monero-wallet-rpc|moneropay)(.service)?)+$
 
