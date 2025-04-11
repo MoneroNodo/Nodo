@@ -29,7 +29,7 @@ eval "$_APTGET" install apt-transport-https lsb-release curl
 
 printf  'deb https://repo.i2pd.xyz/debian %s main' "$(lsb_release -sc)" \
 	| tee /etc/apt/sources.list.d/i2pd.list
-printf  'deb-src https://repo.i2pd.xyz/debian %s main' "$(lsb_release -sc)" \
+printf  '\ndeb-src https://repo.i2pd.xyz/debian %s main' "$(lsb_release -sc)" \
 	| tee -a /etc/apt/sources.list.d/i2pd.list
 wget -q -O - https://repo.i2pd.xyz/r4sas.gpg | apt-key add -
 
