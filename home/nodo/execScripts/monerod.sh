@@ -47,11 +47,11 @@ else
 fi
 
 if [ "$I2P_ENABLED" == "TRUE" ]; then
-	i2p_args="--tx-proxy=i2p,127.0.0.1:4447,16,disable_noise ${I2P_ADDRESS:+--anonymous-inbound=$I2P_ADDRESS,127.0.0.1:$I2P_PORT},32 "
+	i2p_args="--tx-proxy=i2p,127.0.0.1:4447,16,disable_noise ${I2P_ADDRESS:+--anonymous-inbound=$I2P_ADDRESS,127.0.0.1:$I2P_PORT,32} "
 fi
 
 if [ "$TOR_ENABLED" == "TRUE" ]; then
-	tor_args="--tx-proxy=tor,127.0.0.1:9050,16,disable_noise ${TOR_ADDRESS:+--anonymous-inbound=$TOR_ADDRESS:$TOR_PORT,127.0.0.1:$TOR_PORT},32 "
+	tor_args="--tx-proxy=tor,127.0.0.1:9050,16,disable_noise ${TOR_ADDRESS:+--anonymous-inbound=$TOR_ADDRESS:$TOR_PORT,127.0.0.1:$TOR_PORT,32} "
 fi
 
 if [ "$RPC_ENABLED" == "TRUE" ]; then
