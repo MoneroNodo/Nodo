@@ -7,14 +7,22 @@ test "$_cwd" = "" && exit 1
 
 . "$_cwd"/home/nodo/common.sh
 
+# remove duplicate entries in the default sysctl.conf file
+# TODO eventually delete this
+cp /etc/sysctl.conf /etc/sysctl.backup
+cat /etc/sysctl.backup | head -67 > /etc/sysctl.conf
+
 ##Disable IPv6 (confuses Monero start script if IPv6 is present)
 #and IPv6 sucks
 showtext "Disabling IPv6..."
-echo 'net.ipv6.conf.all.disable_ipv6 = 1' | tee -a /etc/sysctl.conf
-echo 'net.ipv6.conf.default.disable_ipv6 = 1' | tee -a /etc/sysctl.conf
-echo 'net.ipv6.conf.lo.disable_ipv6 = 1' | tee -a /etc/sysctl.conf
-echo 'vm.nr_hugepages=3072' | tee -a /etc/sysctl.conf
-echo 'vm.swappiness=10' | tee -a /etc/sysctl.conf
+# write/overwrite conf file for this
+cat << "EOF" >  /etc/sysctl.d/10-nodo.conf
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+vm.nr_hugepages=3072
+vm.swappiness=10
+EOF
 
 ##Perform system update and upgrade now. This then allows for reboot before next install step, preventing warnings about kernal upgrades when installing the new packages (dependencies).
 #setup debug file to track errors
