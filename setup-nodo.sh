@@ -10,7 +10,7 @@ test "$_cwd" = "" && exit 1
 # remove duplicate entries in the default sysctl.conf file
 # TODO eventually delete this
 cp /etc/sysctl.conf /etc/sysctl.backup
-cat /etc/sysctl.backup | head -67 > /etc/sysctl.conf
+cat /etc/sysctl.backup | head -n 67 > /etc/sysctl.conf
 
 ##Disable IPv6 (confuses Monero start script if IPv6 is present)
 #and IPv6 sucks
