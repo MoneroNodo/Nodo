@@ -61,9 +61,10 @@ fi
 if [ "$BANLIST_BOOG900_ENABLED" == "TRUE" ] || [ "$BANLIST_GUIXMRPM_ENABLED" == "TRUE" ]; then
 	[ -f /media/monero/banlist.txt ] || bash /home/nodo/update-banlists.sh
 	banlist_args="--ban-list /media/monero/banlist.txt "
-else #TODO add gui option to opt-in to `enable-dns-blocklist`. Note: cannot use both at the same time.
-# elif [ $BANLIST_DNS == "TRUE" ]; then
-	banlist_args="--enable-dns-blocklist "
 fi
 
-eval /home/nodo/bin/monerod "${i2p_args}${tor_args}${rpc_args}${cln_flags}${banlist_args}" --rpc-restricted-bind-ip="$DEVICE_IP" --rpc-restricted-bind-port="$RPC_PORT" --db-sync-mode="$SYNC_MODE" --data-dir="$DATA_DIR" --zmq-pub tcp://"$DEVICE_IP":"$ZMQ_PUB" --in-peers="$IN_PEERS" --out-peers="$OUT_PEERS" --limit-rate-up="$LIMIT_RATE_UP" --limit-rate-down="$LIMIT_RATE_DOWN" --max-log-file-size=10485760 --log-level=0 --max-log-files=1 --non-interactive
+if [ "$BANLIST_DNS" == "TRUE" ]; then
+	dns_banlist_args="--enable-dns-blocklist "
+fi
+
+eval /home/nodo/bin/monerod "${i2p_args}${tor_args}${rpc_args}${cln_flags}${banlist_args}${dns_banlist_args}" --rpc-restricted-bind-ip="$DEVICE_IP" --rpc-restricted-bind-port="$RPC_PORT" --db-sync-mode="$SYNC_MODE" --data-dir="$DATA_DIR" --zmq-pub tcp://"$DEVICE_IP":"$ZMQ_PUB" --in-peers="$IN_PEERS" --out-peers="$OUT_PEERS" --limit-rate-up="$LIMIT_RATE_UP" --limit-rate-down="$LIMIT_RATE_DOWN" --max-log-file-size=10485760 --log-level=0 --max-log-files=1 --non-interactive
