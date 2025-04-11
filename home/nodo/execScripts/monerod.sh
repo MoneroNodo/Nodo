@@ -47,11 +47,11 @@ else
 fi
 
 if [ "$I2P_ENABLED" == "TRUE" ]; then
-	i2p_args="--tx-proxy=i2p,127.0.0.1:4447,32,disable_noise ${I2P_ADDRESS:+--anonymous-inbound=$I2P_ADDRESS,127.0.0.1:$I2P_PORT} "
+	i2p_args="--tx-proxy=i2p,127.0.0.1:4447,16,disable_noise ${I2P_ADDRESS:+--anonymous-inbound=$I2P_ADDRESS,127.0.0.1:$I2P_PORT},32 "
 fi
 
 if [ "$TOR_ENABLED" == "TRUE" ]; then
-	tor_args="--tx-proxy=tor,127.0.0.1:9050,32,disable_noise ${TOR_ADDRESS:+--anonymous-inbound=$TOR_ADDRESS:$TOR_PORT,127.0.0.1:$TOR_PORT} "
+	tor_args="--tx-proxy=tor,127.0.0.1:9050,16,disable_noise ${TOR_ADDRESS:+--anonymous-inbound=$TOR_ADDRESS:$TOR_PORT,127.0.0.1:$TOR_PORT},32 "
 fi
 
 if [ "$RPC_ENABLED" == "TRUE" ]; then
@@ -61,9 +61,10 @@ fi
 if [ "$BANLIST_BOOG900_ENABLED" == "TRUE" ] || [ "$BANLIST_GUIXMRPM_ENABLED" == "TRUE" ]; then
 	[ -f /media/monero/banlist.txt ] || bash /home/nodo/update-banlists.sh
 	banlist_args="--ban-list /media/monero/banlist.txt "
-else #TODO add gui option to opt-in to `enable-dns-blocklist`. Note: cannot use both at the same time.
-# elif [ $BANLIST_DNS == "TRUE" ]; then
-	banlist_args="--enable-dns-blocklist "
 fi
 
-eval /home/nodo/bin/monerod "${i2p_args}${tor_args}${rpc_args}${cln_flags}${banlist_args}" --rpc-restricted-bind-ip="$DEVICE_IP" --rpc-restricted-bind-port="$RPC_PORT" --db-sync-mode="$SYNC_MODE" --data-dir="$DATA_DIR" --zmq-pub tcp://"$DEVICE_IP":"$ZMQ_PUB" --in-peers="$IN_PEERS" --out-peers="$OUT_PEERS" --limit-rate-up="$LIMIT_RATE_UP" --limit-rate-down="$LIMIT_RATE_DOWN" --max-log-file-size=10485760 --log-level=0 --max-log-files=1 --non-interactive
+if [ "$BANLIST_DNS" == "TRUE" ]; then
+	dns_banlist_args="--enable-dns-blocklist "
+fi
+
+eval /home/nodo/bin/monerod "${i2p_args}${tor_args}${rpc_args}${cln_flags}${banlist_args}${dns_banlist_args}" --rpc-restricted-bind-ip="$DEVICE_IP" --rpc-restricted-bind-port="$RPC_PORT" --db-sync-mode="$SYNC_MODE" --data-dir="$DATA_DIR" --zmq-pub tcp://"$DEVICE_IP":"$ZMQ_PUB" --in-peers="$IN_PEERS" --out-peers="$OUT_PEERS" --limit-rate-up="$LIMIT_RATE_UP" --limit-rate-down="$LIMIT_RATE_DOWN" --max-log-file-size=10485760 --log-level=0 --max-log-files=1 --non-interactive
