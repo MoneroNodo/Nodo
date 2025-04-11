@@ -76,12 +76,30 @@ if [ 1 -eq $success ]; then
 	services-start
 fi
 
-if [ "" = "$(getvar 'tor_address')" ]; then
-	bash /home/nodo/setup-domains.sh -tor
+# Ensure i2p and tor are properly configured.
+expectedi2p=$(getvar 'i2p_address')
+expectedtor=$(getvar 'tor_address')
+i2phostname=$(printf "%s.b32.i2p" "$(head -c 391 /var/lib/i2pd/nasXmr.dat | sha256sum | xxd -r -p | base32 | sed s/=//g | tr A-Z a-z)")
+torhostname=$(cat /var/lib/tor/hidden_service/hostname)
+generatetor() {
+        bash /home/nodo/setup-domains.sh -tor
+}
+generatei2p() {
+        bash /home/nodo/setup-domains.sh -i2p
+}
+if [ "" = "${expectedtor}" ]; then
+	echo -e "Onion address is not set.\nGenerating onion hostname..."
+	generatetor
+elif [ "${torhostname}" != "${expectedtor}" ]; then
+	echo -e "${expectedtor}\ndoes NOT match\n${torhostname}\nRegenerating..."
+	generatetor
 fi
-
-if [ "" = "$(getvar 'i2p_address')" ]; then
-	bash /home/nodo/setup-domains.sh -i2p
+if [ "" = "${expectedi2p}" ]; then
+	echo -e "i2p address is not set.\nGenerating i2p hostname..."
+	generatei2p
+elif [ "${i2phostname}" != "${expectedi2p}" ]; then
+	echo -e "${expectedi2p}\ndoes NOT match\n${i2phostname}\nRegenerating..."
+	generatei2p
 fi
 
 remlockfile
