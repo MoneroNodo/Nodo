@@ -34,8 +34,6 @@ fi
 
 showtext "Building Monero..."
 
-[ -f /media/monero/banlist.txt ] || bash /home/nodo/update-banlists.sh
-
 {
 	test -d monero.new && rm -rf monero.new
 	tries=0
