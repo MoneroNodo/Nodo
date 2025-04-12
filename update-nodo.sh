@@ -29,7 +29,6 @@ if [ "$RELEASE" == "$OLD_VERSION_NODO" ]; then
 fi
 
 _cwd=/root/nodo
-test -z "$_cwd" && exit 1
 
 cd /root || exit
 tries=0
