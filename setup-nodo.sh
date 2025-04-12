@@ -111,7 +111,11 @@ showtext "Configuring apache server for access to Monero log file..."
 	fi
 } 2>&1 | tee -a "$DEBUG_LOG"
 
-putvar 'tor_address' "$(cat /var/lib/tor/hidden_service/hostname)"
+#Test for pre-existing hidden services and set variables
+test -f /var/lib/tor/hidden_service/hostname && putvar 'tor_address' "$(cat /var/lib/tor/hidden_service/hostname)"
+test -f /var/lib/tor/ssh/hostname && putvar 'tor_ssh_address' "$(cat /var/lib/tor/ssh/hostname)"
+test -f /var/lib/i2pd/nasXmr.dat && putvar 'i2p_address' "$(printf "%s.b32.i2p" "$(head -c 391 /var/lib/i2pd/nasXmr.dat | sha256sum | xxd -r -p | base32 | sed s/=//g | tr A-Z a-z)")"
+test -f /var/lib/i2pd/nodoSSH.dat && putvar 'i2p_ssh_address' "$(printf "%s.b32.i2p" "$(head -c 391 /var/lib/i2pd/nodoSSH.dat | sha256sum | xxd -r -p | base32 | sed s/=//g | tr A-Z a-z)")"
 
 ##Set Swappiness lower
 showtext "Decreasing swappiness..."
