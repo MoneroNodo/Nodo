@@ -51,10 +51,10 @@ showtext "Building Monero..."
 	git checkout "$RELEASE"
 	git submodule update --init --force
 	USE_DEVICE_TREZOR=OFF USE_SINGLE_BUILDDIR=1 make -j"$(nproc --ignore=2)" || exit 1
-	services-stop
+	services-stop monerod
 	cp build/release/bin/monero* /home/nodo/bin/ || exit 1
 	chmod a+x /home/nodo/bin/monero* || exit 1
-	services-start
+	services-start monerod
 	putvar "versions.monero" "$RELEASE" || exit 1
 	putvar "versions.names.monero" "$_NAME"
 } 2>&1 | tee -a "$DEBUG_LOG"

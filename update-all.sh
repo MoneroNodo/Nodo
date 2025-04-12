@@ -62,19 +62,10 @@ cd /home/nodo || exit 1
 chown nodo:nodo -R nodoui monero monero-lws
 mkdir -p /home/nodo/bin
 chown nodo:nodo /home/nodo/bin
-success=0
-sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-pay.sh && success=1
+sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-pay.sh
 sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-monero.sh && \
-sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-monero-lws.sh && success=1 # LWS depends on Monero codebase
-bash /home/nodo/update-nodoui.sh && success=1
-
-# Restart services afterwards,
-# otherwise the device would be nothing more than a very warm brick
-if [ 1 -eq $success ]; then
-	services-stop
-	sleep 1
-	services-start
-fi
+sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-monero-lws.sh # LWS depends on Monero codebas
+bash /home/nodo/update-nodoui.sh
 
 # Ensure i2p and tor are properly configured.
 expectedi2p=$(getvar 'i2p_address')

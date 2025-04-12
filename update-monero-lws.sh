@@ -51,7 +51,9 @@ showtext "Downloading VTNerd Monero-LWS"
 	cmake -DMONERO_SOURCE_DIR=/home/nodo/monero -DMONERO_BUILD_DIR=/home/nodo/monero/build/release ..
 	showtext "Building VTNerd Monero-LWS"
 	make -j"$(nproc --ignore=2)" || exit 1
+	services-stop monero-lws
 	cp src/monero-lws* /home/nodo/bin/ || exit 1
+	services-start monero-lws
 	putvar "versions.lws" "$RELEASE" || exit 1
 	putvar "versions.names.lws" "$_NAME"
 	cd || exit
