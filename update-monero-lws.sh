@@ -12,8 +12,7 @@ fi
 . /home/nodo/common.sh
 OLD_VERSION_LWS="${1:-$(getvar "versions.lws")}"
 
-RELNAME="e09d3d57e9f88cb47702976965bd6e1ed813c07f
-e09d3d57"
+RELNAME="d8ee984b3c43babbefbb405ae7ebf75b57e85b0c"
 RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
 _NAME="$(printf '%s' "$RELNAME" | tail -n1)"
 
@@ -46,7 +45,7 @@ showtext "Downloading VTNerd Monero-LWS"
 	done
 	cd monero-lws || exit 1
 	# Temporary band-aid as newer commits don't seem to want to build
-	git checkout e09d3d57e9f88cb47702976965bd6e1ed813c07f # TODO remove when lws builds again
+	git checkout d8ee984b3c43babbefbb405ae7ebf75b57e85b0c # TODO remove when lws builds again
 	mkdir build
 	cd build || exit 1
 	cmake -DMONERO_SOURCE_DIR=/home/nodo/monero -DMONERO_BUILD_DIR=/home/nodo/monero/build/release ..
