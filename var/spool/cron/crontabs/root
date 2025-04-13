@@ -1,3 +1,4 @@
+SHELL=/bin/bash
 */30 * * * * bash /home/nodo/update-all.sh
-0 * * * * bash /home/nodo/execScripts/monero-wallet-rpc-sweep.sh
 0 1 * * * bash /home/nodo/update-banlists.sh
+#0 * * * * bash /home/nodo/execScripts/monero-wallet-rpc-sweep.sh
