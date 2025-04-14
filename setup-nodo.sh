@@ -177,6 +177,12 @@ if [ "$_tz" = "Europe/Berlin" ]; then
 	systemctl restart nodoUI
 fi
 
+if [ -f /etc/systemd/system/libretranslate.service ]; then
+	systemctl disable --now libretranslate.service
+	rm -f /etc/systemd/system/libretranslate.service
+	systemctl daemon-reload
+fi
+
 putvar 'zmq_pub' '18083'
 putvar 'tor_port' '18084'
 putvar 'i2p_port' '18085'
