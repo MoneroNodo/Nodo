@@ -24,6 +24,12 @@ vm.nr_hugepages=3072
 vm.swappiness=10
 EOF
 
+##Set & gendrete default / at least one locale
+locale="en_US.UTF-8"
+if [[ $(grep "# ${locale}" /etc/locale.gen) ]]; then
+	sed -i "s/# ${locale}/${locale}/" /etc/locale.gen && locale-gen && update-locale
+fi
+
 ##Perform system update and upgrade now. This then allows for reboot before next install step, preventing warnings about kernal upgrades when installing the new packages (dependencies).
 #setup debug file to track errors
 showtext "Creating Debug log..."
