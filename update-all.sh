@@ -57,15 +57,15 @@ if [ "$(getvar tor_global_enabled)" = "TRUE" ]; then
 fi
 export ALL_PROXY
 
-bash /home/nodo/update-nodo.sh
+bash /root/nodo/update-nodo.sh
 cd /home/nodo || exit 1
 chown nodo:nodo -R nodoui monero monero-lws
 mkdir -p /home/nodo/bin
 chown nodo:nodo /home/nodo/bin
-sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-pay.sh
-sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-monero.sh && \
-sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-monero-lws.sh # LWS depends on Monero codebas
-bash /home/nodo/update-nodoui.sh
+sudo --preserve-env=ALL_PROXY -u nodo bash /root/nodo/update-pay.sh
+sudo --preserve-env=ALL_PROXY -u nodo bash /root/nodo/update-monero.sh && \
+sudo --preserve-env=ALL_PROXY -u nodo bash /root/nodo/update-monero-lws.sh # LWS depends on Monero codebas
+bash /root/nodo/update-nodoui.sh
 
 # Ensure i2p and tor are properly configured.
 expectedi2p=$(getvar 'i2p_address')
