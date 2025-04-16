@@ -114,7 +114,7 @@ showtext "Configuring apache server for access to Monero log file..."
 		chmod 644 /etc/tor/torrc
 		chown root /etc/tor/torrc
 		showtext "Restarting tor service..."
-		service tor restart
+		systemctl restart tor
 	fi
 } 2>&1 | tee -a "$DEBUG_LOG"
 
