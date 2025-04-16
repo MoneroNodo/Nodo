@@ -1,4 +1,5 @@
 SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 */30 * * * * bash /root/nodo/update-all.sh
 0 1 * * * bash /root/nodo/update-banlists.sh
 #0 * * * * bash /home/nodo/execScripts/monero-wallet-rpc-sweep.sh
