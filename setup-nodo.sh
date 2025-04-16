@@ -69,8 +69,8 @@ showtext "Downloading and installing OS updates..."
 } 2>&1 | tee -a "$DEBUG_LOG"
 
 ##Installing dependencies for --- Web Interface
-showtext "Installing dependencies for Web Interface..."
-usermod -a -G nodo www-data
+#showtext "Installing dependencies for Web Interface..."
+#usermod -a -G nodo www-data
 
 showtext "Install home contents"
 cp -vr "$_cwd"/home/nodo/* /home/nodo/
