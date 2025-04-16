@@ -62,10 +62,11 @@ echo "force-confnew" >/etc/dpkg/dpkg.cfg.d/force-confnew
 showtext "Downloading and installing OS updates..."
 {
 	apt update
-	eval "$_APTGET" dist-upgrade
+	#eval "$_APTGET" dist-upgrade
+	eval "$_APTGET" full-upgrade
 	eval "$_APTGET" upgrade
 	##Auto remove any obsolete packages
-	eval "$_APTGET" apt autoremove
+	eval "$_APTGET" autoremove
 } 2>&1 | tee -a "$DEBUG_LOG"
 
 ##Installing dependencies for --- Web Interface
