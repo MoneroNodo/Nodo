@@ -156,21 +156,23 @@ if [ ! -d /opt/moneropay ]; then  # setup moneropay wallet dir
 	mkdir -p /opt/moneropay
 	chown -R moneropay:moneropay /opt/moneropay
 	chmod -R 600 /opt/moneropay
-	systemctl enable --now monero-wallet-rpc
-	systemctl enable --now moneropay
+	#systemctl enable --now monero-wallet-rpc
+	#systemctl enable --now moneropay
 fi
 
+# temporarily disable moneropay TODO remove
+systemctl disable --now monero-wallet-rpc
+systemctl disable --now moneropay
+
+# disable unavailable services
 systemctl disable --now bluetooth
+systemctl disable --now webui
 
 # delete old "pi" user
 pi_user=$(grep pi /etc/passwd)
 if [[ -n "${pi_user}" ]]; then
 	userdel -fr pi
 fi
-
-sudo -u nodo pipx uninstall libretranslate
-sudo -u nodo rm -rf /home/nodo/.local/share/argos-translate
-
 
 _tz="$(getvar 'timezone')"
 if [ "$_tz" = "Europe/London" ]; then
@@ -183,10 +185,13 @@ if [ "$_tz" = "Europe/Berlin" ]; then
 	systemctl restart nodoUI
 fi
 
+# remove libretranslate
 if [ -f /etc/systemd/system/libretranslate.service ]; then
 	systemctl disable --now libretranslate.service
 	rm -f /etc/systemd/system/libretranslate.service
 	systemctl daemon-reload
+	sudo -u nodo pipx uninstall libretranslate
+	sudo -u nodo rm -rf /home/nodo/.local/share/argos-translate
 fi
 
 putvar 'zmq_pub' '18083'
