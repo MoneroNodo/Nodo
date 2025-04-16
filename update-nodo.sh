@@ -86,4 +86,4 @@ showtext "User configuration restored"
 	putvar "versions.names.nodo" "$_NAME"
 	#ubuntu /dev/null odd requiremnt to set permissions
 	chmod 777 /dev/null
-} 2>&1 | tee -a "$DEBUG_LOG"
+} 2>&1 | tee -a "$DEBUG_LOG";
