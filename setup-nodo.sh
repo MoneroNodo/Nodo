@@ -2,7 +2,7 @@
 
 set -e
 
-_cwd="$(pwd)"
+_cwd=/root/nodo
 test "$_cwd" = "" && exit 1
 
 . "$_cwd"/home/nodo/common.sh
