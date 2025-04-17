@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 _cwd=/root/nodo
 test "$_cwd" = "" && exit 1
 
