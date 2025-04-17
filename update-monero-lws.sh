@@ -10,11 +10,18 @@ fi
 #(1) Define variables and updater functions
 #shellcheck source=home/nodo/common.sh
 . /home/nodo/common.sh
-OLD_VERSION_LWS="${1:-$(getvar "versions.lws")}"
 
-RELNAME="d8ee984b3c43babbefbb405ae7ebf75b57e85b0c"
+cd /home/nodo || exit 1
+
+OLD_VERSION_LWS="${1:-$(getvar "versions.lws")}"
+#Error Log:
+touch "$DEBUG_LOG"
+
+#RELNAME=$(get_release_commit_name "vtnerd" "monero-lws")
+#RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
+RELNAME="d8ee984b3c43babbefbb405ae7ebf75b57e85b0c"  # Temporary band-aid as newer commits don't seem to want to build
 RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
-_NAME="$(printf '%s' "$RELNAME" | tail -n1)"
+_NAME="${RELNAME:0:8}"
 
 if [ -z "$RELEASE" ] && [ -z "$FIRSTINSTALL" ]; then # Release somehow not set or empty
 	showtext "Failed to check for update for LWS"
@@ -26,30 +33,27 @@ if [ "$RELEASE" == "$OLD_VERSION_LWS" ]; then
 	exit 0
 fi
 
-touch "$DEBUG_LOG"
+showtext "Building VTNerd Monero-LWS.."
 
-##Delete old version
-showtext "Delete old version"
-showtext "Downloading VTNerd Monero-LWS"
 {
-	tries=0
-	if [ -d monero-lws ]; then
-		rm -rf /home/nodo/monero-lws
+	if [ ! -d monero-lws ]; then
+		tries=0
+		until git clone --recursive https://github.com/vtnerd/monero-lws.git; do
+			sleep 1
+			tries=$((tries + 1))
+			if [ $tries -ge 5 ]; then
+				exit 1
+			fi
+		done
 	fi
-	until git clone --recursive https://github.com/vtnerd/monero-lws.git; do
-		sleep 1
-		tries=$((tries + 1))
-		if [ $tries -ge 5 ]; then
-			exit 1
-		fi
-	done
 	cd monero-lws || exit 1
-	# Temporary band-aid as newer commits don't seem to want to build
-	git checkout d8ee984b3c43babbefbb405ae7ebf75b57e85b0c # TODO remove when lws builds again
-	mkdir build
-	cd build || exit 1
+	git reset --hard
+	git pull
+	git checkout "$RELEASE"
+	submodule update --init --force
+	[ -d build ] && rm -rf build
+	mkdir build && cd $_ || exit 1
 	cmake -DMONERO_SOURCE_DIR=/home/nodo/monero -DMONERO_BUILD_DIR=/home/nodo/monero/build/release ..
-	showtext "Building VTNerd Monero-LWS"
 	make -j"$(nproc --ignore=2)" || exit 1
 	services-stop monero-lws
 	cp src/monero-lws* /home/nodo/bin/ || exit 1
@@ -57,6 +61,5 @@ showtext "Downloading VTNerd Monero-LWS"
 	putvar "versions.lws" "$RELEASE" || exit 1
 	putvar "versions.names.lws" "$_NAME"
 	cd || exit
-	rm -rf /home/nodo/monero-lws
 } 2>&1 | tee -a "$DEBUG_LOG"
 cd || exit 1
