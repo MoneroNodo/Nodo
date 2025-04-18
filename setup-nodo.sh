@@ -22,7 +22,7 @@ vm.nr_hugepages=3072
 vm.swappiness=10
 EOF
 
-##Set & gendrete default / at least one locale
+##Set & generate default (at least one) locale
 locale="en_US.UTF-8"
 if [[ $(grep "# ${locale}" /etc/locale.gen) ]]; then
 	sed -i "s/# ${locale}/${locale}/" /etc/locale.gen && locale-gen && update-locale
@@ -48,24 +48,23 @@ wget -q -O - https://repo.i2pd.xyz/r4sas.gpg | apt-key add -
 # fix debian sources.list
 sed -i "s/main non-free contrib/main non-free non-free-firmware contrib/g" /etc/apt/sources.list
 
-apt update
-
-eval "$_APTGET" install tor i2pd nodejs npm mariadb-client mariadb-server screen fail2ban ufw dialog jq libcurl4-openssl-dev libpthread-stubs0-dev cron exfat-fuse git chrony mingetty build-essential ccache cmake libboost-all-dev miniupnpc libunbound-dev graphviz doxygen libunwind8-dev pkg-config libssl-dev libcurl4-openssl-dev libgtest-dev libreadline-dev libzmq3-dev libsodium-dev libhidapi-dev libhidapi-libusb0 libuv1-dev libhwloc-dev apparmor apparmor-utils apparmor-profiles libcairo2-dev libxt-dev libgirepository1.0-dev gobject-introspection python3-yaml python3-pyyaml-env-tag gdisk xfsprogs build-essential cmake pkg-config libssl-dev libzmq3-dev libunbound-dev libsodium-dev libunwind8-dev liblzma-dev libreadline6-dev libldns-dev libexpat1-dev libpgm-dev libhidapi-dev libusb-1.0-0-dev libprotobuf-dev protobuf-compiler libudev-dev libboost-chrono-dev libboost-date-time-dev libboost-filesystem-dev libboost-locale-dev libboost-program-options-dev libboost-regex-dev libboost-all-dev libboost-serialization-dev libboost-system-dev libboost-thread-dev ccache doxygen graphviz pipx apache2 shellinabox php php-common libgtest-dev xxd 2>&1 | tee -a "$DEBUG_LOG"
-eval "$_APTGET" -t bookworm-backports install golang-go tor
-
 #force confnew by default everywhere
 echo "force-confnew" >/etc/dpkg/dpkg.cfg.d/force-confnew
 
 ##Update and Upgrade system
 showtext "Downloading and installing OS updates..."
 {
-	apt update
+	eval "$_APTGET" update
 	#eval "$_APTGET" dist-upgrade
 	eval "$_APTGET" full-upgrade
 	eval "$_APTGET" upgrade
 	##Auto remove any obsolete packages
 	eval "$_APTGET" autoremove
+	eval "$_APTGET" autoclean
 } 2>&1 | tee -a "$DEBUG_LOG"
+
+eval "$_APTGET" install tor i2pd nodejs npm mariadb-client mariadb-server screen fail2ban ufw dialog jq libcurl4-openssl-dev libpthread-stubs0-dev cron exfat-fuse git chrony mingetty build-essential ccache cmake libboost-all-dev miniupnpc libunbound-dev graphviz doxygen libunwind8-dev pkg-config libssl-dev libcurl4-openssl-dev libgtest-dev libreadline-dev libzmq3-dev libsodium-dev libhidapi-dev libhidapi-libusb0 libuv1-dev libhwloc-dev apparmor apparmor-utils apparmor-profiles libcairo2-dev libxt-dev libgirepository1.0-dev gobject-introspection python3-yaml python3-pyyaml-env-tag gdisk xfsprogs build-essential cmake pkg-config libssl-dev libzmq3-dev libunbound-dev libsodium-dev libunwind8-dev liblzma-dev libreadline6-dev libldns-dev libexpat1-dev libpgm-dev libhidapi-dev libusb-1.0-0-dev libprotobuf-dev protobuf-compiler libudev-dev libboost-chrono-dev libboost-date-time-dev libboost-filesystem-dev libboost-locale-dev libboost-program-options-dev libboost-regex-dev libboost-all-dev libboost-serialization-dev libboost-system-dev libboost-thread-dev ccache doxygen graphviz pipx apache2 shellinabox php php-common libgtest-dev xxd 2>&1 | tee -a "$DEBUG_LOG"
+eval "$_APTGET" -t bookworm-backports install golang-go tor
 
 ##Installing dependencies for --- Web Interface
 #showtext "Installing dependencies for Web Interface..."
