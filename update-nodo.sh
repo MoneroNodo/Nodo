@@ -17,6 +17,7 @@ RELNAME="$(get_tag_commit_name "moneronodo" "nodo")"
 
 RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
 _NAME="$(printf '%s' "$RELNAME" | tail -n1)"
+_NAME="nodo-${_NAME}" # print as a string so the version is parsed properly
 
 if [ -z "$RELEASE" ]; then # Release somehow not set or empty
 	showtext "Failed to check for update for Nodo"
