@@ -111,6 +111,38 @@ check_connection() {
 	return 1
 }
 
+check_update_tag() {
+	tries=0
+	maxtries=3
+	while [ -z "$RELEASE" ] || [ "$RELEASE" == "null" ]; do
+		if [ "${tries}" -ge "${maxtries}" ]; then
+			showtext "[${tries}/${maxtries}] Update check failed for $2"
+			exit 0
+		fi
+
+		# Check for updates
+		tries=$((tries+1))
+		showtext "[${tries}/${maxtries}] Checking updates for $2"
+		if [ "$2" == "Monero" ]; then  # strictly use releases for monero
+			RELNAME=$(get_release_commit_name "$1" "$2")
+		elif [ "$3" == "github.com" ]; then
+			RELNAME=$(get_tag_commit_name "$1" "$2")
+		elif [ "$3" == "gitlab.com" ]; then
+			RELNAME=$(gitlab_get_tag_commit_name "$1" "$2")
+		fi
+		RELEASE=$(printf '%s' "$RELNAME" | head -n1)
+		_NAME=$(printf '%s' "$RELNAME" | tail -n1)
+		echo "${RELEASE}"
+		echo "${_NAME}"
+		sleep 2
+	done
+
+	if [[ "$OLD_VERSION" == "$RELEASE" ]]; then
+		showtext "No update for $2"
+		exit 0
+	fi
+}
+
 ENCRYPT_FS="0"
 
 setup_drive() {
