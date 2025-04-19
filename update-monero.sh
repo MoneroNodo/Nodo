@@ -35,24 +35,25 @@ fi
 showtext "Building Monero..."
 
 {
-	test -d monero.new && rm -rf monero.new
-	tries=0
-	until git clone --recursive https://github.com/monero-project/monero.git monero.new; do
-		sleep 1
-		tries=$((tries + 1))
-		if [ $tries -ge 5 ]; then
-			exit 1
-		fi
-	done
-	rm -rf monero
-	mv monero.new monero
+	if [ ! -d monero ]; then
+		tries=0
+		until git clone --recursive https://github.com/monero-project/monero.git; do
+			sleep 1
+			tries=$((tries + 1))
+			if [ $tries -ge 5 ]; then
+				exit 1
+			fi
+		done
+	fi
 	cd monero || exit 1
+	git reset --hard
+	git pull
 	git checkout "$RELEASE"
 	git submodule update --init --force
+	[ -d build/release ] && rm -rf build/release
 	USE_DEVICE_TREZOR=OFF USE_SINGLE_BUILDDIR=1 make -j"$(nproc --ignore=2)" || exit 1
 	services-stop monerod
 	cp build/release/bin/monero* /home/nodo/bin/ || exit 1
-	chmod a+x /home/nodo/bin/monero* || exit 1
 	services-start monerod
 	putvar "versions.monero" "$RELEASE" || exit 1
 	putvar "versions.names.monero" "$_NAME"
