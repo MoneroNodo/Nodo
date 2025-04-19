@@ -13,32 +13,27 @@ fi
 
 cd /home/nodo || exit 1
 
-OLD_VERSION_LWS="${1:-$(getvar "versions.lws")}"
+OLD_VERSION="${1:-$(getvar "versions.lws")}"
+OLD_TAG="${1:-$(getvar "versions.names.lws")}"
 #Error Log:
 touch "$DEBUG_LOG"
 
-#RELNAME=$(get_release_commit_name "vtnerd" "monero-lws")
-#RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
+#Check for updates
 RELNAME="d8ee984b3c43babbefbb405ae7ebf75b57e85b0c"  # Temporary band-aid as newer commits don't seem to want to build
 RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
 _NAME="${RELNAME:0:8}"
 
-if [ -z "$RELEASE" ] && [ -z "$FIRSTINSTALL" ]; then # Release somehow not set or empty
-	showtext "Failed to check for update for LWS"
-	exit 0
-fi
-
-if [ "$RELEASE" == "$OLD_VERSION_LWS" ]; then
-	showtext "No update for LWS"
-	exit 0
-fi
+project="vtnerd"
+repo="monero-lws"
+githost="github.com"
+check_update_tag "${project}" "${repo}" "${githost}"
 
 showtext "Building VTNerd Monero-LWS.."
 
 {
 	if [ ! -d monero-lws ]; then
 		tries=0
-		until git clone --recursive https://github.com/vtnerd/monero-lws.git; do
+		until git clone --recursive https://"${githost}"/"${project}"/"${repo}"; do
 			sleep 1
 			tries=$((tries + 1))
 			if [ $tries -ge 5 ]; then
@@ -53,7 +48,7 @@ showtext "Building VTNerd Monero-LWS.."
 	submodule update --init --force
 	[ -d build ] && rm -rf build
 	mkdir build && cd $_ || exit 1
-	cmake -DMONERO_SOURCE_DIR=/home/nodo/monero -DMONERO_BUILD_DIR=/home/nodo/monero/build/release ..
+	cmake -DMONERO_SOURCE_DIR=/home/nodo/monero -DMONERO_BUILD_DIR=/home/nodo/monero/build/release .. || exit 1
 	make -j"$(nproc --ignore=2)" || exit 1
 	services-stop monero-lws
 	cp src/monero-lws* /home/nodo/bin/ || exit 1

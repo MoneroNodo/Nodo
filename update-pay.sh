@@ -11,32 +11,23 @@ fi
 . /home/nodo/common.sh
 cd /home/nodo || exit 1
 
-OLD_VERSION_EXP="${1:-$(getvar "versions.pay")}"
-
-RELNAME=$(gitlab_get_tag_commit_name "moneropay" "moneropay")
-RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
-_NAME="$(printf '%s' "$RELNAME" | tail -n1)"
-
-#RELEASE=2d8478c
-
-if [ -z "$RELEASE" ] && [ -z "$FIRSTINSTALL" ]; then # Release somehow not set or empty
-	showtext "Failed to check for update for MoneroPay"
-	exit 0
-fi
-
-if [ "$RELEASE" == "$OLD_VERSION_EXP" ]; then
-	showtext "No update for MoneroPay"
-	exit 0
-fi
-
+OLD_VERSION="${1:-$(getvar "versions.pay")}"
+OLD_TAG="${1:-$(getvar "versions.names.pay")}"
+#Error log
 touch "$DEBUG_LOG"
+
+#Check for updates
+project="moneropay"
+repo="Moneropay"
+githost="gitlab.com"
+check_update_tag "${project}" "${repo}" "${githost}"
 
 {
 	tries=0
 	if [ -d moneropay ]; then
 		rm -rf /home/nodo/moneropay
 	fi
-	until git clone -b master https://gitlab.com/moneropay/moneropay; do
+	until git clone -b master https://"${githost}"/"${project}"/"${repo}" moneropay; do
 		sleep 1
 		tries=$((tries + 1))
 		if [ $tries -ge 5 ]; then

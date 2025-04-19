@@ -9,35 +9,27 @@ fi
 
 #shellcheck source=home/nodo/common.sh
 . /home/nodo/common.sh
-
 cd /home/nodo || exit 1
 
 [ -d monero.retain ] && rm -rf monero.retain
 
 OLD_VERSION="${1:-$(getvar "versions.monero")}"
+OLD_TAG="${1:-$(getvar "versions.names.monero")}"
 #Error Log:
 touch "$DEBUG_LOG"
 
-RELNAME=$(get_release_commit_name "monero-project" "monero")
-RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
-_NAME="$(printf '%s' "$RELNAME" | tail -n1)"
-
-if [ -z "$RELEASE" ] && [ -z "$FIRSTINSTALL" ]; then # Release somehow not set or empty
-	showtext "Failed to check for update for Monero"
-	exit 0
-fi
-
-if [ "$RELEASE" == "$OLD_VERSION" ]; then
-	showtext "No update for Monero"
-	exit 0
-fi
+#Check for updates
+project="monero-project"
+repo="Monero"
+githost="github.com"
+check_update_tag "${project}" "${repo}" "${githost}"
 
 showtext "Building Monero..."
 
 {
 	if [ ! -d monero ]; then
 		tries=0
-		until git clone --recursive https://github.com/monero-project/monero.git; do
+		until git clone --recursive https://"${githost}"/"${project}"/"${repo}" monero; do
 			sleep 1
 			tries=$((tries + 1))
 			if [ $tries -ge 5 ]; then
@@ -50,6 +42,7 @@ showtext "Building Monero..."
 	git pull
 	git checkout "$RELEASE"
 	git submodule update --init --force
+	# Cleanup build dir
 	[ -d build/release ] && rm -rf build/release
 	USE_DEVICE_TREZOR=OFF USE_SINGLE_BUILDDIR=1 make -j"$(nproc --ignore=2)" || exit 1
 	services-stop monerod

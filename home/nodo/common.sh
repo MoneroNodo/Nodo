@@ -116,7 +116,7 @@ check_update_tag() {
 	maxtries=3
 	while [ -z "$RELEASE" ] || [ "$RELEASE" == "null" ]; do
 		if [ "${tries}" -ge "${maxtries}" ]; then
-			showtext "[${tries}/${maxtries}] Update check failed for $2"
+			showtext "[${tries}/${maxtries}] Update check failed for $2\n"
 			exit 0
 		fi
 
@@ -132,13 +132,14 @@ check_update_tag() {
 		fi
 		RELEASE=$(printf '%s' "$RELNAME" | head -n1)
 		_NAME=$(printf '%s' "$RELNAME" | tail -n1)
-		echo "${RELEASE}"
-		echo "${_NAME}"
 		sleep 2
 	done
 
+	echo "${OLD_TAG} -> ${_NAME}"
+	echo "${RELEASE}"
+
 	if [[ "$OLD_VERSION" == "$RELEASE" ]]; then
-		showtext "No update for $2"
+		showtext "No update for $2\n"
 		exit 0
 	fi
 }
