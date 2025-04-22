@@ -40,15 +40,8 @@ done
 	cd nodo || exit 1
 fi
 
+#Reset repo
 git reset --hard "$RELEASE"
-##Update and Upgrade systemhtac
-showtext "Receiving and applying Debian updates to the latest version..."
-{
-	eval "$_APTGET" update
-	eval "$_APTGET" upgrade
-	eval "$_APTGET" dist-upgrade
-	eval "$_APTGET" autoremove -y
-} 2>&1 | tee -a "$DEBUG_LOG"
 
 #Backup User values
 showtext "Creating backups of any settings you have customised"
@@ -57,8 +50,8 @@ showtext "Creating backups of any settings you have customised"
 _v=/home/nodo/variables
 mv "${_v}"/config.json "${_v}"/config_retain.json
 showtext "User configuration saved"
-#Install Update
 
+#Install Update
 showtext "setup-nodo.sh..."
 bash "${_cwd}"/setup-nodo.sh
 
