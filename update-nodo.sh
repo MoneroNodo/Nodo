@@ -20,7 +20,8 @@ project="moneronodo"
 repo="Nodo"
 githost="github.com"
 commit_type="tag"  # [tag|release]
-check_update_tag "${project}" "${repo}" "${githost}" "${commit_type}"
+get_latest_tag "${project}" "${repo}" "${githost}" "${commit_type}"
+_NAME="nodo-${_NAME}"
 
 _cwd=/root/nodo
 

@@ -21,9 +21,9 @@ touch "$DEBUG_LOG"
 #Check for updates
 project="monero-project"
 repo="Monero"
-githost="github.com"
+githost="github.com librejo.monerodevs.org"
 commit_type="release"  # [tag|release]
-check_update_tag "${project}" "${repo}" "${githost}" "${commit_type}"
+get_latest_tag "${project}" "${repo}" "${githost}" "${commit_type}"
 
 showtext "Building Monero..."
 
@@ -39,6 +39,9 @@ showtext "Building Monero..."
 		done
 	fi
 	cd monero || exit 1
+	if [ ! $(git remote -v | grep "${githost}") ]; then
+		git remote set-url origin https://"${githost}"/"${project}"/"${repo}"
+	fi
 	git reset --hard
 	git pull
 	git checkout "$RELEASE"
