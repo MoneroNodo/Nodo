@@ -10,24 +10,17 @@ fi
 #Create/ammend debug file for handling update errors:
 #shellcheck source=home/nodo/common.sh
 . /home/nodo/common.sh
-OLD_VERSION_NODO="${1:-$(getvar "versions.nodo")}"
+OLD_VERSION="${1:-$(getvar "versions.nodo")}"
+OLD_TAG="${1:-$(getvar "versions.names.nodo")}"
+#Error log
 touch "$DEBUG_LOG"
 
-RELNAME="$(get_tag_commit_name "moneronodo" "nodo")"
-
-RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
-_NAME="$(printf '%s' "$RELNAME" | tail -n1)"
-_NAME="nodo-${_NAME}" # print as a string so the version is parsed properly
-
-if [ -z "$RELEASE" ]; then # Release somehow not set or empty
-	showtext "Failed to check for update for Nodo"
-	exit 0
-fi
-
-if [ "$RELEASE" == "$OLD_VERSION_NODO" ]; then
-	showtext "No update for Nodo"
-	exit 0
-fi
+#Check for updates
+project="moneronodo"
+repo="Nodo"
+githost="github.com"
+commit_type="tag"  # [tag|release]
+check_update_tag "${project}" "${repo}" "${githost}" "${commit_type}"
 
 _cwd=/root/nodo
 
@@ -37,7 +30,7 @@ if [ -d "${_cwd}" ]; then
 	cd nodo || exit 1
 	git pull
 else
-	until git clone https://github.com/moneronodo/nodo "${_cwd}"; do
+	until git clone https://"${githost}"/"${project}"/"${repo}" "${_cwd}"; do
 	sleep 1
 	tries=$((tries + 1))
 	if [ $tries -ge 5 ]; then

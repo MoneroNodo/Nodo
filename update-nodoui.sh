@@ -11,24 +11,17 @@ fi
 #shellcheck source=home/nodo/common.sh
 . /home/nodo/common.sh
 cd /home/nodo || exit 1
-OLD_VERSION_EUI="${1:-$(getvar "versions.nodoui")}"
-
-
-RELNAME=$(get_tag_commit_name "moneronodo" "nodoui")
-RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
-_NAME="$(printf '%s' "$RELNAME" | tail -n1)"
-
-if [ -z "$RELEASE" ] && [ -z "$FIRSTINSTALL" ]; then # Release somehow not set or empty
-	showtext "Failed to check for update for Nodo UI"
-	exit 0
-fi
-
-if [ "$RELEASE" == "$OLD_VERSION_EUI" ]; then
-	showtext "No update for Nodo UI"
-	exit 0
-fi
-
+OLD_VERSION="${1:-$(getvar "versions.nodoui")}"
+OLD_TAG="${1:-$(getvar "versions.names.nodoui")}"
+#Error log
 touch "$DEBUG_LOG"
+
+#Check for updates
+project="moneronodo"
+repo="NodoUI"
+githost="github.com"
+commit_type="tag"  # [tag|release]
+check_update_tag "${project}" "${repo}" "${githost}" "${commit_type}"
 
 showtext "
 ####################
@@ -44,7 +37,7 @@ showtext "Downloading Nodo UI"
 		rm -rf /home/nodo/nodoui
 	}
 	trap remove INT HUP EXIT
-	git clone --recursive https://github.com/moneronodo/nodoui.git
+	git clone --recursive https://"${githost}"/"${project}"/"${repo}" nodoui
 	cd nodoui || exit 1
 	git reset --hard HEAD
 	git checkout "$RELEASE"
