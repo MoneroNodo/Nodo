@@ -19,7 +19,8 @@ touch "$DEBUG_LOG"
 project="moneronodo"
 repo="Nodo"
 githost="github.com"
-check_update_tag "${project}" "${repo}" "${githost}"
+commit_type="tag"  # [tag|release]
+check_update_tag "${project}" "${repo}" "${githost}" "${commit_type}"
 
 _cwd=/root/nodo
 

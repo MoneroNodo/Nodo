@@ -20,7 +20,8 @@ touch "$DEBUG_LOG"
 project="moneropay"
 repo="Moneropay"
 githost="gitlab.com"
-check_update_tag "${project}" "${repo}" "${githost}"
+commit_type="tag"  # [tag|release]
+check_update_tag "${project}" "${repo}" "${githost}" "${commit_type}"
 
 {
 	tries=0

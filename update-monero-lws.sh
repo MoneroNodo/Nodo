@@ -26,7 +26,8 @@ _NAME="${RELNAME:0:8}"
 project="vtnerd"
 repo="monero-lws"
 githost="github.com"
-check_update_tag "${project}" "${repo}" "${githost}"
+commit_type="tag"  # [tag|release]
+check_update_tag "${project}" "${repo}" "${githost}" "${commit_type}"
 
 showtext "Building VTNerd Monero-LWS.."
 

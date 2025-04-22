@@ -123,12 +123,24 @@ check_update_tag() {
 		# Check for updates
 		tries=$((tries+1))
 		showtext "[${tries}/${maxtries}] Checking updates for $2"
-		if [ "$2" == "Monero" ]; then  # strictly use releases for monero
-			RELNAME=$(get_release_commit_name "$1" "$2")
-		elif [ "$3" == "github.com" ]; then
-			RELNAME=$(get_tag_commit_name "$1" "$2")
+		if [ "$3" == "github.com" ]; then
+			if [ "$4" == "release" ]; then
+				RELNAME=$(get_release_commit_name "$1" "$2")
+			elif [ "$4" == "tag" ]; then
+				RELNAME=$(get_tag_commit_name "$1" "$2")
+			else
+				echo -e "Error: Invalid release type for $2\n"
+				exit 1
+			fi
 		elif [ "$3" == "gitlab.com" ]; then
-			RELNAME=$(gitlab_get_tag_commit_name "$1" "$2")
+			if [ "$4" == "release" ]; then
+				RELNAME=$(gitlab_get_release_commit_name "$1" "$2" "$3")
+			elif [ "$4" == "tag" ]; then
+				RELNAME=$(gitlab_get_tag_commit_name "$1" "$2" "$3")
+			else
+				echo -e "Error: Invalid release type for $2\n"
+				exit 1
+			fi
 		fi
 		RELEASE=$(printf '%s' "$RELNAME" | head -n1)
 		_NAME=$(printf '%s' "$RELNAME" | tail -n1)

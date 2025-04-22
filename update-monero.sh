@@ -22,7 +22,8 @@ touch "$DEBUG_LOG"
 project="monero-project"
 repo="Monero"
 githost="github.com"
-check_update_tag "${project}" "${repo}" "${githost}"
+commit_type="release"  # [tag|release]
+check_update_tag "${project}" "${repo}" "${githost}" "${commit_type}"
 
 showtext "Building Monero..."
 
