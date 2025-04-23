@@ -118,7 +118,7 @@ get_latest_tag() {
 	while [ -z "$RELEASE" ]; do
 		if [ "${tries}" -ge "${maxtries}" ]; then
 			showtext "[${tries}/${maxtries}] Update check failed for $2\n"
-			exit 0
+			exit 1
 		fi
 		tries=$((tries+1))
 		for githost in "${githosts[@]}"; do
