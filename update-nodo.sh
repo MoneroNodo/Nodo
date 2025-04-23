@@ -20,7 +20,8 @@ project="moneronodo"
 repo="Nodo"
 githost="github.com"
 commit_type="tag"  # [tag|release]
-check_update_tag "${project}" "${repo}" "${githost}" "${commit_type}"
+get_latest_tag "${project}" "${repo}" "${githost}" "${commit_type}"
+_NAME="nodo-${_NAME}"
 
 _cwd=/root/nodo
 
@@ -38,6 +39,15 @@ else
 	fi
 done
 	cd nodo || exit 1
+fi
+
+#Update functions and force a recheck if release hash is unset
+if [ -z "${RELEASE}" ]; then
+	#Activate updated functions
+	. /root/nodo/home/nodo/common.sh
+	#Check for updates
+	get_latest_tag "${project}" "${repo}" "${githost}" "${commit_type}" || echo "Failed to set version"; exit 1
+	_NAME="nodo-${_NAME}"
 fi
 
 #Reset repo

@@ -111,39 +111,32 @@ check_connection() {
 	return 1
 }
 
-check_update_tag() {
+get_latest_tag() {
 	tries=0
 	maxtries=3
-	while [ -z "$RELEASE" ] || [ "$RELEASE" == "null" ]; do
+	eval githosts=($3)
+	while [ -z "$RELEASE" ]; do
 		if [ "${tries}" -ge "${maxtries}" ]; then
 			showtext "[${tries}/${maxtries}] Update check failed for $2\n"
-			exit 0
+			exit 1
 		fi
-
-		# Check for updates
 		tries=$((tries+1))
-		showtext "[${tries}/${maxtries}] Checking updates for $2"
-		if [ "$3" == "github.com" ]; then
-			if [ "$4" == "release" ]; then
-				RELNAME=$(get_release_commit_name "$1" "$2")
-			elif [ "$4" == "tag" ]; then
-				RELNAME=$(get_tag_commit_name "$1" "$2")
-			else
-				echo -e "Error: Invalid release type for $2\n"
-				exit 1
+		for githost in "${githosts[@]}"; do
+			showtext "[${tries}/${maxtries}] Checking ${githost} for $2 updates"
+			RAW_RELNAME=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' https://"${githost}"/"$1"/"$2")
+			RELNAME=$(
+				if [ "$4" == "release" ]; then
+					echo "$RAW_RELNAME" | grep '\^{}$' | awk 'END{print $1"\n"gensub(/refs\/tags\/([^^]+)(.*)/,"\\1","g",$2)}'
+				elif [ "$4" == "tag" ]; then
+					echo "$RAW_RELNAME" | awk 'END{print $1"\n"gensub(/refs\/tags\/([^^]+)(.*)/,"\\1","g",$2)}'
+				fi
+			)
+			if [ "${RELNAME}" ]; then
+				RELEASE=$(printf '%s' "$RELNAME" | head -n1)
+				_NAME=$(printf '%s' "$RELNAME" | tail -n1)
+				break
 			fi
-		elif [ "$3" == "gitlab.com" ]; then
-			if [ "$4" == "release" ]; then
-				RELNAME=$(gitlab_get_release_commit_name "$1" "$2" "$3")
-			elif [ "$4" == "tag" ]; then
-				RELNAME=$(gitlab_get_tag_commit_name "$1" "$2" "$3")
-			else
-				echo -e "Error: Invalid release type for $2\n"
-				exit 1
-			fi
-		fi
-		RELEASE=$(printf '%s' "$RELNAME" | head -n1)
-		_NAME=$(printf '%s' "$RELNAME" | tail -n1)
+		done
 		sleep 2
 	done
 
@@ -154,6 +147,8 @@ check_update_tag() {
 		showtext "No update for $2\n"
 		exit 0
 	fi
+
+        export githost="$githost"
 }
 
 ENCRYPT_FS="0"

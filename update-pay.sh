@@ -19,9 +19,9 @@ touch "$DEBUG_LOG"
 #Check for updates
 project="moneropay"
 repo="Moneropay"
-githost="gitlab.com"
+githost="gitlab.com github.com"
 commit_type="tag"  # [tag|release]
-check_update_tag "${project}" "${repo}" "${githost}" "${commit_type}"
+get_latest_tag "${project}" "${repo}" "${githost}" "${commit_type}"
 
 {
 	tries=0

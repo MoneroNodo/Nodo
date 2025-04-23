@@ -27,14 +27,14 @@ project="vtnerd"
 repo="monero-lws"
 githost="github.com"
 commit_type="tag"  # [tag|release]
-check_update_tag "${project}" "${repo}" "${githost}" "${commit_type}"
+get_latest_tag "${project}" "${repo}" "${githost}" "${commit_type}"
 
 showtext "Building VTNerd Monero-LWS.."
 
 {
 	if [ ! -d monero-lws ]; then
 		tries=0
-		until git clone --recursive https://"${githost}"/"${project}"/"${repo}"; do
+		until git clone --recursive https://"${githost}"/"${project}"/"${repo}" monero-lws; do
 			sleep 1
 			tries=$((tries + 1))
 			if [ $tries -ge 5 ]; then
@@ -43,6 +43,9 @@ showtext "Building VTNerd Monero-LWS.."
 		done
 	fi
 	cd monero-lws || exit 1
+	if [ ! $(git remote -v | grep "${githost}") ]; then
+		git remote set-url origin https://"${githost}"/"${project}"/"${repo}"
+	fi
 	git reset --hard
 	git pull
 	git checkout "$RELEASE"
