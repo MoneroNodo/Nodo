@@ -10,24 +10,18 @@ fi
 #Create/ammend debug file for handling update errors:
 #shellcheck source=home/nodo/common.sh
 . /home/nodo/common.sh
-OLD_VERSION_NODO="${1:-$(getvar "versions.nodo")}"
+OLD_VERSION="${1:-$(getvar "versions.nodo")}"
+OLD_TAG="${1:-$(getvar "versions.names.nodo")}"
+#Error log
 touch "$DEBUG_LOG"
 
-RELNAME="$(get_tag_commit_name "moneronodo" "nodo")"
-
-RELEASE="$(printf '%s' "$RELNAME" | head -n1)"
-_NAME="$(printf '%s' "$RELNAME" | tail -n1)"
-_NAME="nodo-${_NAME}" # print as a string so the version is parsed properly
-
-if [ -z "$RELEASE" ]; then # Release somehow not set or empty
-	showtext "Failed to check for update for Nodo"
-	exit 0
-fi
-
-if [ "$RELEASE" == "$OLD_VERSION_NODO" ]; then
-	showtext "No update for Nodo"
-	exit 0
-fi
+#Check for updates
+project="moneronodo"
+repo="Nodo"
+githost="github.com"
+commit_type="tag"  # [tag|release]
+get_latest_tag "${project}" "${repo}" "${githost}" "${commit_type}"
+_NAME="nodo-${_NAME}"
 
 _cwd=/root/nodo
 
@@ -37,7 +31,7 @@ if [ -d "${_cwd}" ]; then
 	cd nodo || exit 1
 	git pull
 else
-	until git clone https://github.com/moneronodo/nodo "${_cwd}"; do
+	until git clone https://"${githost}"/"${project}"/"${repo}" "${_cwd}"; do
 	sleep 1
 	tries=$((tries + 1))
 	if [ $tries -ge 5 ]; then
@@ -47,15 +41,17 @@ done
 	cd nodo || exit 1
 fi
 
+#Update functions and force a recheck if release hash is unset
+if [ -z "${RELEASE}" ]; then
+	#Activate updated functions
+	. /root/nodo/home/nodo/common.sh
+	#Check for updates
+	get_latest_tag "${project}" "${repo}" "${githost}" "${commit_type}" || echo "Failed to set version"; exit 1
+	_NAME="nodo-${_NAME}"
+fi
+
+#Reset repo
 git reset --hard "$RELEASE"
-##Update and Upgrade systemhtac
-showtext "Receiving and applying Debian updates to the latest version..."
-{
-	eval "$_APTGET" update
-	eval "$_APTGET" upgrade
-	eval "$_APTGET" dist-upgrade
-	eval "$_APTGET" autoremove -y
-} 2>&1 | tee -a "$DEBUG_LOG"
 
 #Backup User values
 showtext "Creating backups of any settings you have customised"
@@ -64,17 +60,25 @@ showtext "Creating backups of any settings you have customised"
 _v=/home/nodo/variables
 mv "${_v}"/config.json "${_v}"/config_retain.json
 showtext "User configuration saved"
-#Install Update
 
+#Install Update
 showtext "setup-nodo.sh..."
 bash "${_cwd}"/setup-nodo.sh
 
+# Restore config
 showtext "Merge config.json"
 if jq -s '.[0] * .[1] | {config: .config}' "${_v}"/config.json "${_v}"/config_retain.json > "${_v}"/config.merge.json; then
 	cp -f "${_v}"/config.merge.json "${_v}"/config.json
 else
 	cp -f "${_v}"/config_retain.json "${_v}"/config.json
 fi
+putvar 'zmq_pub' '18083'
+putvar 'tor_port' '18084'
+putvar 'i2p_port' '18085'
+putvar 'lws_port' '18086'
+putvar 'monero_port' '18080'
+putvar 'monero_public_port' '18081'
+putvar 'monero_rpc_port' '18089'
 
 chown nodo:nodo "${_v}"/config.json
 

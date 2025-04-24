@@ -111,6 +111,46 @@ check_connection() {
 	return 1
 }
 
+get_latest_tag() {
+	tries=0
+	maxtries=3
+	eval githosts=($3)
+	while [ -z "$RELEASE" ]; do
+		if [ "${tries}" -ge "${maxtries}" ]; then
+			showtext "[${tries}/${maxtries}] Update check failed for $2\n"
+			exit 1
+		fi
+		tries=$((tries+1))
+		for githost in "${githosts[@]}"; do
+			showtext "[${tries}/${maxtries}] Checking ${githost} for $2 updates"
+			RAW_RELNAME=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' https://"${githost}"/"$1"/"$2")
+			RELNAME=$(
+				if [ "$4" == "release" ]; then
+					echo "$RAW_RELNAME" | grep '\^{}$' | awk 'END{print $1"\n"gensub(/refs\/tags\/([^^]+)(.*)/,"\\1","g",$2)}'
+				elif [ "$4" == "tag" ]; then
+					echo "$RAW_RELNAME" | awk 'END{print $1"\n"gensub(/refs\/tags\/([^^]+)(.*)/,"\\1","g",$2)}'
+				fi
+			)
+			if [ "${RELNAME}" ]; then
+				RELEASE=$(printf '%s' "$RELNAME" | head -n1)
+				_NAME=$(printf '%s' "$RELNAME" | tail -n1)
+				break
+			fi
+		done
+		sleep 2
+	done
+
+	echo "${OLD_TAG} -> ${_NAME}"
+	echo "${RELEASE}"
+
+	if [[ "$OLD_VERSION" == "$RELEASE" ]]; then
+		showtext "No update for $2\n"
+		exit 0
+	fi
+
+        export githost="$githost"
+}
+
 ENCRYPT_FS="0"
 
 setup_drive() {
