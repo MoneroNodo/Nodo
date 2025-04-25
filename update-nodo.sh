@@ -29,6 +29,10 @@ cd /root || exit
 tries=0
 if [ -d "${_cwd}" ]; then
 	cd nodo || exit 1
+	have_remote=$(git remote -v | grep "${githost}")
+	if [ -z "${have_remote}"  ]; then
+		git remote set-url origin https://"${githost}"/"${project}"/"${repo}"
+	fi
 	git pull
 else
 	until git clone https://"${githost}"/"${project}"/"${repo}" "${_cwd}"; do
