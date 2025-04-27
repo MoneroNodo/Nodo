@@ -1,6 +1,7 @@
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 # Check software updates
+@reboot rm -f /home/nodo/variables/updatelock
 @reboot sleep 60 && bash /root/nodo/update-all.sh | tee -a /root/update.log
 0 */12 * * * bash /root/nodo/update-all.sh | tee -a /root/update.log
 # Check banlist updates
