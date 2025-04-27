@@ -43,7 +43,8 @@ showtext "Building VTNerd Monero-LWS.."
 		done
 	fi
 	cd monero-lws || exit 1
-	if [ ! $(git remote -v | grep "${githost}") ]; then
+	have_remote=$(git remote -v | grep "${githost}")
+	if [ -z "${have_remote}"  ]; then
 		git remote set-url origin https://"${githost}"/"${project}"/"${repo}"
 	fi
 	git reset --hard
