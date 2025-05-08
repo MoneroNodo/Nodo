@@ -69,24 +69,8 @@ showtext "User configuration saved"
 showtext "setup-nodo.sh..."
 bash "${_cwd}"/setup-nodo.sh
 
-# Restore config
-showtext "Merge config.json"
-if jq -s '.[0] * .[1] | {config: .config}' "${_v}"/config.json "${_v}"/config_retain.json > "${_v}"/config.merge.json; then
-	cp -f "${_v}"/config.merge.json "${_v}"/config.json
-else
-	cp -f "${_v}"/config_retain.json "${_v}"/config.json
-fi
-putvar 'zmq_pub' '18083'
-putvar 'tor_port' '18084'
-putvar 'i2p_port' '18085'
-putvar 'lws_port' '18086'
-putvar 'monero_port' '18080'
-putvar 'monero_public_port' '18081'
-putvar 'monero_rpc_port' '18089'
-
-chown nodo:nodo "${_v}"/config.json
-
-showtext "User configuration restored"
+#Merge / restore variables
+bash "${_cwd}"/configure-nodo.sh
 
 #Update system version number to new one installed
 {
