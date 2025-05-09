@@ -17,7 +17,15 @@ force_vars=(
 .config.zmq_port
 )
 # Remove deprecated variables
-deprecated_vars=(.config.sync_mode)
+deprecated_vars=(
+.config.sync_mode
+.config.add_clearnet_peer
+.config.add_tor_peer
+.config.add_i2p_peer
+.config.monero_block_sync_size
+.config.tor_tx_proxy_port
+.config.i2p_tx_proxy_port
+)
 
 # Merge user and repo config
 remove_vars=("${force_vars[@]} ${deprecated_vars[@]}")
