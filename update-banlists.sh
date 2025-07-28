@@ -20,8 +20,8 @@ fi
 
 # Combine results
 {
-	[[ -f mrl_banlist ]] && cat mrl_banlist
 	[[ -f xmrpm_banlist ]] && cat xmrpm_banlist
+	[[ -f mrl_banlist ]] && cat mrl_banlist
 } | sort -u > newbanlist
 
 # Generate banlist.txt
