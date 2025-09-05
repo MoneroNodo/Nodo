@@ -222,13 +222,13 @@ log() {
 
 services="monerod monero-lws monero-wallet-rpc moneropay"
 services-stop() {
-	for f in ${1:-$services}; do
+	for f in ${@:-$services}; do
 		sudo systemctl stop "$f".service
 	done
 }
 
 services-start() {
-	for f in ${1:-$services}; do
+	for f in ${@:-$serviceo}; do
 		if systemctl is-enabled "$f".service; then
 			sudo systemctl start "$f".service
 		fi
