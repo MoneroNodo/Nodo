@@ -19,7 +19,7 @@ touch "$DEBUG_LOG"
 #Check for updates
 project="moneropay"
 repo="Moneropay"
-githost="gitlab.com github.com"
+githost="gitlab.com"
 commit_type="tag"  # [tag|release]
 get_latest_tag "${project}" "${repo}" "${githost}" "${commit_type}"
 
