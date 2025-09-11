@@ -114,7 +114,7 @@ check_connection() {
 get_latest_tag() {
 	tries=0
 	maxtries=3
-	eval githosts=($3)
+	read -ra githosts <<< "$3"
 	while [ -z "$RELEASE" ]; do
 		if [ "${tries}" -ge "${maxtries}" ]; then
 			showtext "[${tries}/${maxtries}] Update check failed for $2\n"
