@@ -50,9 +50,9 @@ showtext "Building Monero..."
 	# Cleanup build dir
 	[ -d build/release ] && rm -rf build/release
 	USE_DEVICE_TREZOR=OFF USE_SINGLE_BUILDDIR=1 make -j"$(nproc --ignore=2)" || exit 1
+	trap "services-start monerod monero-wallet-rpc" INT EXIT HUP
 	services-stop monerod monero-wallet-rpc
 	cp build/release/bin/monero* /home/nodo/bin/ || exit 1
-	services-start monerod monero-wallet-rpc
 	putvar "versions.monero" "$RELEASE" || exit 1
 	putvar "versions.names.monero" "$_NAME"
 } 2>&1 | tee -a "$DEBUG_LOG"

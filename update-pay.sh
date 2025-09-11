@@ -41,10 +41,10 @@ get_latest_tag "${project}" "${repo}" "${githost}" "${commit_type}"
 	go build -o moneropay cmd/moneropay/main.go || exit 1
 	putvar "versions.pay" "$RELEASE" || exit 1
 	putvar "versions.names.pay" "$_NAME"
+	trap "services-start moneropay" INT EXIT HUP
 	services-stop moneropay
 	cp moneropay /home/nodo/bin/ || exit 1
 	cp -r db /home/nodo/execScripts/ || exit 1
-	services-start moneropay
 	cd || exit
 	rm -rf /home/nodo/moneropay
 } 2>&1 | tee -a "$DEBUG_LOG"
