@@ -103,7 +103,7 @@ get_ip() {
 
 check_connection() {
 	touse="$(ip r | grep default | cut -d ' ' -f 3)"
-	for f in $touse; do
+	for f in "${touse[@]}"; do
 		if ping -q -w 1 -c 1 "$f" >/dev/null; then
 			return 0
 		fi
@@ -115,15 +115,15 @@ get_latest_tag() {
 	tries=0
 	maxtries=3
 	read -ra githosts <<< "$3"
-	while [ -z "$RELEASE" ]; do
-		if [ "${tries}" -ge "${maxtries}" ]; then
+	while [ "$RELEASE" = "" ]; do
+		if [ "$tries" -ge "$maxtries" ]; then
 			showtext "[${tries}/${maxtries}] Update check failed for $2\n"
 			exit 1
 		fi
-		tries=$((tries+1))
+		tries=$((tries + 1))
 		for githost in "${githosts[@]}"; do
 			showtext "[${tries}/${maxtries}] Checking ${githost} for $2 updates"
-			RAW_RELNAME=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' https://"${githost}"/"$1"/"$2")
+			RAW_RELNAME=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' https://"$githost"/"$1"/"$2")
 			RELNAME=$(
 				if [ "$4" == "release" ]; then
 					echo "$RAW_RELNAME" | grep '\^{}$' | awk 'END{print $1"\n"gensub(/refs\/tags\/([^^]+)(.*)/,"\\1","g",$2)}'
@@ -131,7 +131,7 @@ get_latest_tag() {
 					echo "$RAW_RELNAME" | awk 'END{print $1"\n"gensub(/refs\/tags\/([^^]+)(.*)/,"\\1","g",$2)}'
 				fi
 			)
-			if [ "${RELNAME}" ]; then
+			if [ "$RELNAME" ]; then
 				RELEASE=$(printf '%s' "$RELNAME" | head -n1)
 				_NAME=$(printf '%s' "$RELNAME" | tail -n1)
 				break
@@ -141,14 +141,14 @@ get_latest_tag() {
 	done
 
 	echo "${OLD_TAG} -> ${_NAME}"
-	echo "${RELEASE}"
+	echo "$RELEASE"
 
 	if [[ "$OLD_VERSION" == "$RELEASE" ]]; then
 		showtext "No update for $2\n"
 		exit 0
 	fi
 
-        export githost="$githost"
+	export githost="$githost"
 }
 
 ENCRYPT_FS="0"
@@ -206,7 +206,7 @@ putvar() {
 	else
 		contents=$(jq --argjson var "\"$2\"" ".config.$1 = \$var" "$CONFIG_FILE")
 	fi
-	if [ -n "$contents" ]; then
+	if [ "$contents" != "" ]; then
 		echo -E "$contents" >"$CONFIG_FILE"
 	fi
 }
@@ -222,13 +222,13 @@ log() {
 
 services="monerod monero-lws monero-wallet-rpc moneropay"
 services-stop() {
-	for f in ${@:-$services}; do
+	for f in "${@:-$services}"; do
 		sudo systemctl stop "$f".service
 	done
 }
 
 services-start() {
-	for f in ${@:-$serviceo}; do
+	for f in "${@:-$serviceo}"; do
 		if systemctl is-enabled "$f".service; then
 			sudo systemctl start "$f".service
 		fi
