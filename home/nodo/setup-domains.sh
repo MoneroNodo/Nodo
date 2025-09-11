@@ -4,7 +4,8 @@
 # -i2p: setup i2p domains
 # no args: setup both tor and i2p domains
 
-. /home/nodo/common.sh
+#shellcheck source=home/nodo/common.sh
+. /root/nodo/home/nodo/common.sh || exit 1
 
 if [ $# -eq 0 ]; then
 	__tor=1

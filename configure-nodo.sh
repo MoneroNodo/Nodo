@@ -1,6 +1,7 @@
 #!/bin/bash
 
-. /home/nodo/common.sh
+#shellcheck source=home/nodo/common.sh
+. /root/nodo/home/nodo/common.sh
 
 _v=/home/nodo/variables
 # Restore config

@@ -9,7 +9,7 @@ fi
 
 #Create/ammend debug file for handling update errors:
 #shellcheck source=home/nodo/common.sh
-. /home/nodo/common.sh
+. /root/nodo/home/nodo/common.sh || exit 1
 OLD_VERSION="${1:-$(getvar "versions.nodo")}"
 OLD_TAG="${1:-$(getvar "versions.names.nodo")}"
 #Error log

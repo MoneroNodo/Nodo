@@ -2,7 +2,7 @@
 # Just a root wrapper for the update scripts. Bit silly, I know
 
 #shellcheck source=home/nodo/common.sh
-. /home/nodo/common.sh
+. /root/nodo/home/nodo/common.sh || exit 1
 
 _lockfile=/home/nodo/variables/updatelock
 

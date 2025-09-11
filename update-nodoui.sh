@@ -9,7 +9,7 @@ fi
 
 #(1) Define variables and updater functions
 #shellcheck source=home/nodo/common.sh
-. /home/nodo/common.sh
+. /root/nodo/home/nodo/common.sh || exit 1
 cd /home/nodo || exit 1
 OLD_VERSION="${1:-$(getvar "versions.nodoui")}"
 OLD_TAG="${1:-$(getvar "versions.names.nodoui")}"
