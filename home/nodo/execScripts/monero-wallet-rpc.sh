@@ -17,4 +17,4 @@ if [ "$RPC_ENABLED" == "TRUE" ]; then
 fi
 
 eval sudo -u moneropay /home/nodo/bin/monero-wallet-rpc --trusted-daemon --daemon-address 127.0.0.1:"$MONERO_PUBLIC_PORT" \
-	"$rpc_args" --disable-rpc-login --non-interactive --rpc-bind-port=34512 --wallet-dir /opt/moneropay/
+	"$rpc_args" --disable-rpc-login --non-interactive --rpc-bind-port=34512 --wallet-dir /opt/moneropay/ --shared-ringdb-dir /opt/moneropay/
