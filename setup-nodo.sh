@@ -154,13 +154,9 @@ if [ ! -d /opt/moneropay ]; then  # setup moneropay wallet dir
 	mkdir -p /opt/moneropay
 	chown -R moneropay:moneropay /opt/moneropay
 	chmod -R 600 /opt/moneropay
-	#systemctl enable --now monero-wallet-rpc
-	#systemctl enable --now moneropay
+	systemctl enable --now moneropay
 fi
 
-# temporarily disable moneropay TODO remove
-systemctl disable --now monero-wallet-rpc
-systemctl disable --now moneropay
 
 # disable unavailable services
 systemctl disable --now bluetooth
