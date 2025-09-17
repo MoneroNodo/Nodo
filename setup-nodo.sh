@@ -43,7 +43,21 @@ printf  'deb https://repo.i2pd.xyz/debian %s main' "$(lsb_release -sc)" \
 	| tee /etc/apt/sources.list.d/i2pd.list
 printf  '\ndeb-src https://repo.i2pd.xyz/debian %s main' "$(lsb_release -sc)" \
 	| tee -a /etc/apt/sources.list.d/i2pd.list
-wget -q -O - https://repo.i2pd.xyz/r4sas.gpg | apt-key add -
+
+# keyrings
+# i2pd
+test ! -f /usr/share/keyrings/r4sas.gpg &&
+	wget -q -P /usr/share/keyrings/ https://repo.i2pd.xyz/r4sas.gpg &&
+	chmod 644 /usr/share/keyrings/r4sas.gpg
+
+# debian
+keyrings=(debian-archive-keyring_2025.1_all.deb debian-keyring_2025.07.26_all.deb)
+for deb in "${keyrings[@]}"; do
+	dpkg -s "${deb%%_*}" | grep -q '^Version: 2025'
+	wget -q -P /dev/shm https://ftp.debian.org/debian/pool/main/d/"$deb" &&
+		dpkg -i /dev/shm/"$deb"
+	rm /dev/shm/"$deb"
+done
 
 # fix debian sources.list
 sed -i "s/main non-free contrib/main non-free non-free-firmware contrib/g" /etc/apt/sources.list
