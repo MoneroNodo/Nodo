@@ -39,10 +39,19 @@ _APTGET='DEBIAN_FRONTEND=noninteractive apt -o Dpkg::Options::=--force-confold -
 
 eval "$_APTGET" install apt-transport-https lsb-release curl
 
-printf  'deb https://repo.i2pd.xyz/debian %s main' "$(lsb_release -sc)" \
-	| tee /etc/apt/sources.list.d/i2pd.list
-printf  '\ndeb-src https://repo.i2pd.xyz/debian %s main' "$(lsb_release -sc)" \
-	| tee -a /etc/apt/sources.list.d/i2pd.list
+cat << _EOF > /etc/apt/sources.list
+deb [signed-by=/usr/share/keyrings/debian-archive-bookworm-automatic.pgp] https://mirrors.aliyun.com/debian bookworm main non-free non-free-firmware contrib
+deb-src [signed-by=/usr/share/keyrings/debian-archive-bookworm-automatic.pgp] https://mirrors.aliyun.com/debian bookworm main non-free non-free-firmware contrib
+deb [signed-by=/usr/share/keyrings/debian-archive-bookworm-security-automatic.pgp] https://mirrors.aliyun.com/debian-security bookworm-security main
+deb-src [signed-by=/usr/share/keyrings/debian-archive-bookworm-security-automatic.pgp] https://mirrors.aliyun.com/debian-security bookworm-security main
+deb [signed-by=/usr/share/keyrings/debian-archive-bookworm-automatic.pgp] https://mirrors.aliyun.com/debian bookworm-backports main non-free non-free-firmware contrib
+deb-src [signed-by=/usr/share/keyrings/debian-archive-bookworm-automatic.pgp] https://mirrors.aliyun.com/debian bookworm-backports main non-free non-free-firmware contrib
+_EOF
+
+cat << _EOF > /etc/apt/sources.list.d/i2pd.list
+deb [signed-by=/usr/share/keyrings/r4sas.gpg] https://repo.i2pd.xyz/debian bookworm main
+deb-src [signed-by=/usr/share/keyrings/r4sas.gpg] https://repo.i2pd.xyz/debian bookworm main
+_EOF
 
 # keyrings
 # i2pd
@@ -58,9 +67,6 @@ for deb in "${keyrings[@]}"; do
 		dpkg -i /dev/shm/"$deb"
 	rm /dev/shm/"$deb"
 done
-
-# fix debian sources.list
-sed -i "s/main non-free contrib/main non-free non-free-firmware contrib/g" /etc/apt/sources.list
 
 #force confnew by default everywhere
 echo "force-confnew" >/etc/dpkg/dpkg.cfg.d/force-confnew
