@@ -9,6 +9,7 @@ WorkingDirectory=/home/nodo/execScripts/
 Type=exec
 Restart=always
 RestartSec=10
+StartLimitIntervalSec=0
 User=nodo
 StandardOutput=inherit
 StandardError=inherit
