@@ -29,3 +29,6 @@ fi
 
 export PATH
 
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+	test -f "$HOME"/bin/sshui && "$HOME"/bin/sshui
+fi
