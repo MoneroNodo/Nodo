@@ -16,6 +16,7 @@ if [ "$(jq '.config.versions | has("names")' < /home/nodo/variables/config.json)
 	putvar 'versions.names.pay' "$(get_tag_name_from_commit "moneropay" "moneropay" "$(getvar "versions.pay")")"
 	putvar 'versions.names.monero' "$(get_tag_name_from_commit "monero-project" "monero" "$(getvar "versions.monero")")"
 	putvar 'versions.names.nodoui' "$(get_tag_name_from_commit "moneronodo" "nodoui" "$(getvar "versions.nodoui")")"
+	putvar 'versions.names.sshui' "$(get_tag_name_from_commit "moneronodo" "sshui" "$(getvar "versions.sshui")")"
 fi
 
 if [ ! "$EUID" = "0" ]; then
@@ -66,6 +67,7 @@ sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-pay.sh
 sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-monero.sh && \
 sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-monero-lws.sh # LWS depends on Monero codebas
 bash /root/nodo/update-nodoui.sh
+bash /root/nodo/update-sshui.sh
 
 # Ensure i2p and tor are properly configured.
 expectedi2p=$(getvar 'i2p_address')

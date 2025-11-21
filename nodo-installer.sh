@@ -72,6 +72,9 @@ showtext "Setting up Monero..."
 	showtext "Setting up NodoUI"
 	bash /home/nodo/update-nodoui.sh 1
 
+	showtext "Setting up sshUI"
+	sudo -u nodo bash /home/nodo/update-sshui.sh 1
+
 	showtext "Setting up MoneroPay"
 	sudo -u nodo bash /home/nodo/update-pay.sh 1
 
