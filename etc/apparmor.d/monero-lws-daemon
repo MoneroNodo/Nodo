@@ -1,38 +1,25 @@
+# Last Modified: Fri Nov 28 10:24:38 2025
+include <tunables/global>
 
 # vim:syntax=apparmor
 
-#include <tunables/global>
 
-@{MONERO_LWS}={monero-lws/build/src}
-@{MONERO_DIR}=.bitmonero
-@{MONERO_DIR_OTHER}={bitmonero,monero*,Monero*}
-@{MONERO_DIR_ALL}=@{MONERO_LWS} @{MONERO_DIR} @{MONERO_DIR_OTHER}
+profile monero-lws /{home/nodo/bin,usr/bin}/monero-lws-daemon {
+  include <abstractions/base>
+  include <abstractions/nameservice>
+  include <abstractions/openssl>
+  include <abstractions/private-files-strict>
 
-profile monero-lws /{home/nodo,media/monero-lws}/**monero-lws-daemon {
-  #include <abstractions/base>
-  #include <abstractions/private-files-strict>
-
-  # Location monerod binary
-  /home/nodo/@{MONERO_LWS}/**monero-lws-admin mr,
-  /home/nodo/@{MONERO_LWS}/**monero-lws-daemon mr,
-
-  # Normal mount
-  owner /media/monero/*/@{MONERO_DIR_ALL}/{,testnet/} rw,
-  owner /media/monero/*/@{MONERO_DIR_ALL}/{,testnet/}bitmonero.log rw,
-  owner /media/monero/*/@{MONERO_DIR_ALL}/{,testnet/}bitmonero.conf r,
-  owner /media/monero/*/@{MONERO_DIR_ALL}/{,testnet/}p2pstate.bin rw,
-  owner /media/monero/*/@{MONERO_DIR_ALL}/{,testnet/}poolstate.bin rw,
-  owner /media/monero/*/@{MONERO_DIR_ALL}/{,testnet/}lmdb/ rw,
-  owner /media/monero/*/@{MONERO_DIR_ALL}/{,testnet/}lmdb/data.mdb mrw,
-  owner /media/monero/*/@{MONERO_DIR_ALL}/{,testnet/}lmdb/lock.mdb mrwk,
-  owner /media/monero/*/@{MONERO_DIR_ALL}/{,testnet/}light_wallet_server/ rw,
-  owner /media/monero/*/@{MONERO_DIR_ALL}/{,testnet/}light_wallet_server/data.mdb mrw,
-  owner /media/monero/*/@{MONERO_DIR_ALL}/{,testnet/}light_wallet_server/lock.mdb mrwk,
-
-  # General files and directories
+  owner /media/monero/bitmonero/ rw,
+  owner /media/monero/bitmonero/light_wallet_server/ rw,
+  owner /media/monero/bitmonero/light_wallet_server/data.mdb mrw,
+  owner /media/monero/bitmonero/light_wallet_server/lock.mdb mrwk,
+  owner /media/monero/bitmonero/lmdb/ rw,
+  owner /media/monero/bitmonero/lmdb/data.mdb mrw,
+  owner /media/monero/bitmonero/lmdb/lock.mdb mrwk,
+  owner /media/monero/bitmonero/p2pstate.bin rw,
+  owner /media/monero/bitmonero/poolstate.bin rw,
   owner /tmp/bitmonero.daemon.stdout.stderr rw,
-  /etc/hosts r,
-  /etc/tor/torsocks.conf r,
-  deny /etc/resolv.conf rwklx,
 
 }
+
