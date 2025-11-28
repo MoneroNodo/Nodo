@@ -64,6 +64,7 @@ include <tunables/global>
   /usr/share/X11/xkb/rules/evdev r,
   /usr/share/libinput/ r,
   /usr/share/libinput/* r,
+  /usr/share/publicsuffix/public_suffix_list.dafsa r,
   owner /home/nodo/.cache/NodoUI/** r,
   owner /home/nodo/.cache/NodoUI/** w,
   owner /home/nodo/.cache/fontconfig/* rw,
