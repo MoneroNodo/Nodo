@@ -1,0 +1,14 @@
+# Last Modified: Fri Nov 28 11:54:56 2025
+abi <abi/3.0>,
+
+include <tunables/global>
+
+/home/nodo/bin/monero-lws-admin {
+  include <abstractions/base>
+
+  /home/nodo/bin/monero-lws-admin mr,
+  /media/monero/bitmonero/light_wallet_server/data.mdb rw,
+  /media/monero/bitmonero/light_wallet_server/lock.mdb rwk,
+
+}
+

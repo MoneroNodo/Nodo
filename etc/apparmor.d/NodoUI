@@ -1,0 +1,82 @@
+# Last Modified: Fri Nov 28 12:07:05 2025
+abi <abi/3.0>,
+
+include <tunables/global>
+
+/opt/nodo/NodoUI {
+  include <abstractions/X>
+  include <abstractions/base>
+  include <abstractions/consoles>
+  include <abstractions/dbus>
+  include <abstractions/dri-common>
+  include <abstractions/fonts>
+  include <abstractions/nameservice>
+  include <abstractions/openssl>
+  include <abstractions/ssl_certs>
+  include <abstractions/user-tmp>
+
+  capability dac_override,
+  capability net_admin,
+  capability sys_admin,
+
+  network inet stream,
+  network inet6 stream,
+  network netlink raw,
+
+  deny owner "/home/*/.config/Unknown Organization/*" rw,
+  deny owner "/home/nodo/.config/Unknown Organization/NodoUI.conf" rw,
+  deny owner "/home/nodo/.config/Unknown Organization/NodoUI.conf.lock" rw,
+  deny owner "/home/nodo/.config/Unknown Organization/NodoUI.conf.lock.rmlock" rw,
+
+  /dev/input/* rw,
+  /dev/mali0 rw,
+  /dev/tty0 rw,
+  /etc/host.conf r,
+  /etc/hosts r,
+  /etc/nsswitch.conf r,
+  /etc/passwd r,
+  /etc/services r,
+  /home/nodo/payments.sqlite r,
+  /home/nodo/variables/config.json rw,
+  /home/nodo/variables/nodoUI.feeds.json r,
+  /home/nodo/variables/nodoUI.system.json r,
+  /opt/nodo/** r,
+  /opt/nodo/NodoUI mr,
+  /opt/nodo/i18n/* r,
+  /opt/panfrost/** r,
+  /opt/panfrost/**/ r,
+  /opt/panfrost/lib/aarch64-linux-gnu/** mr,
+  /opt/panfrost/lib/aarch64-linux-gnu/libEGL.so.* mr,
+  /opt/panfrost/lib/aarch64-linux-gnu/libgbm.so.* mr,
+  /opt/panfrost/lib/aarch64-linux-gnu/libglapi.so.* mr,
+  /run/resolvconf/resolv.conf r,
+  /run/udev/data/* r,
+  /sys/bus/ r,
+  /sys/class/ r,
+  /sys/class/drm/ r,
+  /sys/class/input/ r,
+  /sys/devices/platform/** r,
+  /sys/devices/platform/adc-keys/input/** r,
+  /sys/devices/platform/display-subsystem/drm/** r,
+  /sys/devices/platform/display-subsystem/drm/card0/** r,
+  /sys/devices/virtual/input/** r,
+  /sys/firmware/devicetree/base/compatible r,
+  /usr/share/X11/xkb/rules/evdev r,
+  /usr/share/libinput/ r,
+  /usr/share/libinput/* r,
+  /usr/share/publicsuffix/public_suffix_list.dafsa r,
+  owner /home/nodo/.cache/NodoUI/** r,
+  owner /home/nodo/.cache/NodoUI/** w,
+  owner /home/nodo/.cache/fontconfig/* rw,
+  owner /home/nodo/.cache/mesa_shader_cache/** r,
+  owner /home/nodo/.cache/mesa_shader_cache/** w,
+  owner /home/nodo/.cache/qtshadercache-arm64-little_endian-lp64/* r,
+  owner /home/nodo/payments.sqlite rwk,
+  owner /home/nodo/variables/config.json.lock w,
+  owner /home/nodo/variables/nodoUI.system.json rw,
+  owner /opt/nodo/** mr,
+  owner /tmp/runtime-/ w,
+  owner /var/cache/fontconfig/** mrw,
+
+}
+
