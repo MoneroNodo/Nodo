@@ -10,6 +10,7 @@ profile monero-lws /{home/nodo/bin,usr/bin}/monero-lws-daemon {
   include <abstractions/openssl>
   include <abstractions/private-files-strict>
 
+  owner /light_wallet_server/ w,
   owner /media/monero/bitmonero/ rw,
   owner /media/monero/bitmonero/light_wallet_server/ rw,
   owner /media/monero/bitmonero/light_wallet_server/data.mdb mrw,
