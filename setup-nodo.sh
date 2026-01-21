@@ -63,7 +63,7 @@ test ! -f /usr/share/keyrings/r4sas.gpg &&
 keyrings=(debian-archive-keyring_2025.1_all.deb debian-keyring_2025.07.26_all.deb)
 for deb in "${keyrings[@]}"; do
 	dpkg -s "${deb%%_*}" | grep -q '^Version: 2025'
-	wget -q -P /dev/shm https://ftp.debian.org/debian/pool/main/d/"$deb" &&
+	wget -q -P /dev/shm https://ftp.debian.org/debian/pool/main/d/"${deb%%_*}"/"$deb" &&
 		dpkg -i /dev/shm/"$deb"
 	rm /dev/shm/"$deb"
 done
