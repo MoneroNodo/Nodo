@@ -37,6 +37,7 @@ include <tunables/global>
   owner /proc/uptime r,
   owner /run/blkid/* rw,
   owner /run/blkid/* wl,
+  owner /sys/devices/platform/fde30000.dsi/fde30000.dsi.0/backlight/fde30000.dsi.0/brightness rw,
   owner /sys/devices/platform/fe150000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/nvme/nvme0/** r,
   owner /sys/devices/platform/fe150000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/nvme/nvme0/**/ r,
   owner /sys/devices/system/cpu/** r,
