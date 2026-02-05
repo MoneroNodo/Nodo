@@ -71,7 +71,7 @@ index 5c89880..ead912b 100644
  else ()' || exit 1
 	[ -d build ] && rm -rf build
 	mkdir build && cd $_ || exit 1
-	cmake -DCMAKE_BUILD_TYPE=Relase -DMONERO_SOURCE_DIR=/home/nodo/monero -DMONERO_BUILD_DIR=/home/nodo/monero/build/release .. || exit 1
+	cmake -DCMAKE_BUILD_TYPE=Release -DMONERO_SOURCE_DIR=/home/nodo/monero -DMONERO_BUILD_DIR=/home/nodo/monero/build/release .. || exit 1
 	make -j"$(nproc --ignore=2)" || exit 1
 	trap "services-start monero-lws" INT EXIT HUP
 	services-stop monero-lws
