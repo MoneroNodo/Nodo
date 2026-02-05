@@ -1,4 +1,4 @@
-# Last Modified: Fri Nov 28 12:29:19 2025
+# Last Modified: Thu Feb  5 10:55:58 2026
 abi <abi/3.0>,
 
 include <tunables/global>
@@ -11,11 +11,6 @@ include <tunables/global>
 
   /home/nodo/bin/monero-wallet-rpc mr,
   owner /home/nodo/bin/monero-wallet-rpc.log w,
-  owner /opt/moneropay/data.mdb rw,
-  owner /opt/moneropay/lock.mdb rwk,
-  owner /opt/moneropay/wallet rw,
-  owner /opt/moneropay/wallet.keys rwk,
-  owner /opt/moneropay/wallet.new rw,
+  owner /opt/moneropay/* rwk,
 
 }
-

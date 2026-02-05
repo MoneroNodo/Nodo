@@ -1,9 +1,9 @@
-# Last Modified: Thu Feb  5 10:23:48 2026
+# Last Modified: Thu Feb  5 11:03:55 2026
 abi <abi/3.0>,
 
 include <tunables/global>
 
-/opt/nodo/NodoUI {
+/opt/nodo/NodoUI flags=(complain) {
   include <abstractions/X>
   include <abstractions/base>
   include <abstractions/consoles>
@@ -67,13 +67,15 @@ include <tunables/global>
   /usr/share/libinput/ r,
   /usr/share/libinput/* r,
   /usr/share/publicsuffix/public_suffix_list.dafsa r,
+  owner /home/nodo/ r,
   owner /home/nodo/.cache/NodoUI/** r,
   owner /home/nodo/.cache/NodoUI/** w,
   owner /home/nodo/.cache/fontconfig/* rw,
-  owner /home/nodo/.cache/mesa_shader_cache/** krw,
+  owner /home/nodo/.cache/mesa_shader_cache/** rwk,
   owner /home/nodo/.cache/qtshadercache-arm64-little_endian-lp64/* r,
   owner /home/nodo/.cache/qtshadercache-arm64-little_endian-lp64/* w,
   owner /home/nodo/payments.sqlite rwk,
+  owner /home/nodo/payments.sqlite-journal rw,
   owner /home/nodo/variables/config.json.lock w,
   owner /home/nodo/variables/nodoUI.system.json rw,
   owner /opt/nodo/** mr,
