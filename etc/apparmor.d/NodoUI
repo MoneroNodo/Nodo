@@ -1,4 +1,4 @@
-# Last Modified: Fri Nov 28 12:07:05 2025
+# Last Modified: Thu Feb  5 10:23:48 2026
 abi <abi/3.0>,
 
 include <tunables/global>
@@ -9,6 +9,7 @@ include <tunables/global>
   include <abstractions/consoles>
   include <abstractions/dbus>
   include <abstractions/dri-common>
+  include <abstractions/enchant>
   include <abstractions/fonts>
   include <abstractions/nameservice>
   include <abstractions/openssl>
@@ -69,9 +70,9 @@ include <tunables/global>
   owner /home/nodo/.cache/NodoUI/** r,
   owner /home/nodo/.cache/NodoUI/** w,
   owner /home/nodo/.cache/fontconfig/* rw,
-  owner /home/nodo/.cache/mesa_shader_cache/** r,
-  owner /home/nodo/.cache/mesa_shader_cache/** w,
+  owner /home/nodo/.cache/mesa_shader_cache/** krw,
   owner /home/nodo/.cache/qtshadercache-arm64-little_endian-lp64/* r,
+  owner /home/nodo/.cache/qtshadercache-arm64-little_endian-lp64/* w,
   owner /home/nodo/payments.sqlite rwk,
   owner /home/nodo/variables/config.json.lock w,
   owner /home/nodo/variables/nodoUI.system.json rw,
@@ -80,4 +81,3 @@ include <tunables/global>
   owner /var/cache/fontconfig/** mrw,
 
 }
-

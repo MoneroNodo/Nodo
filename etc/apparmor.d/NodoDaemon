@@ -1,4 +1,4 @@
-# Last Modified: Fri Nov 28 11:54:10 2025
+# Last Modified: Thu Feb  5 10:19:31 2026
 abi <abi/3.0>,
 
 include <tunables/global>
@@ -6,16 +6,19 @@ include <tunables/global>
 /opt/nodo/NodoDaemon {
   include <abstractions/base>
 
+  capability audit_write,
   capability net_raw,
 
   network inet dgram,
   network inet raw,
   network inet6 dgram,
   network inet6 raw,
+  network netlink raw,
 
   /home/nodo/bin/monero-lws-admin Px,
   /opt/nodo/NodoDaemon mr,
   /usr/bin/cat mrix,
+  /usr/bin/dash mrix,
   /usr/bin/df mrix,
   /usr/bin/free mrix,
   /usr/bin/ping mrix,
@@ -30,6 +33,15 @@ include <tunables/global>
   owner /etc/fstab r,
   owner /etc/ld.so.cache r,
   owner /etc/locale.alias r,
+  owner /etc/login.defs r,
+  owner /etc/nsswitch.conf r,
+  owner /etc/pam.d/common-account r,
+  owner /etc/pam.d/common-auth r,
+  owner /etc/pam.d/common-password r,
+  owner /etc/pam.d/common-session r,
+  owner /etc/pam.d/other r,
+  owner /etc/passwd r,
+  owner /etc/shadow r,
   owner /proc/*/mountinfo r,
   owner /proc/filesystems r,
   owner /proc/meminfo r,
@@ -44,4 +56,3 @@ include <tunables/global>
   owner /sys/devices/virtual/thermal/thermal_zone0/temp r,
 
 }
-
