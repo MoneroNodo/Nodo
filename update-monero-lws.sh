@@ -24,6 +24,8 @@ commit_type="tag"  # [tag|release]
 branch="release-v0.3_0.18"
 get_latest_tag "${project}" "${repo}" "${githost}" "${commit_type}"
 
+export RELEASE=48d5f29c1b5ac905a25faa514f544513b7754bdd
+export RELNAME="v0.3_0.18_48d5f29"
 
 showtext "Building VTNerd Monero-LWS.."
 
@@ -45,30 +47,7 @@ showtext "Building VTNerd Monero-LWS.."
 	fi
 	git reset --hard HEAD
 	git pull origin "$branch"
-	git checkout "$branch"
-	# git checkout "$RELEASE"
-	# necessary to build on debian 12:
-	git apply <<<'diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 5c89880..ead912b 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -141,6 +141,7 @@ if (MONERO_BUILD_DIR)
-     NORM_LIBRARY
-     GSSAPI_LIBRARY
-     PROTOLIB_LIBRARY
-+    ZMQ_LIB
-   )
-
-   if (NOT (monero_monero_SOURCE_DIR MATCHES "${MONERO_SOURCE_DIR}"))
-@@ -232,7 +233,7 @@ else()
- endif()
-
- set(ZMQ_INCLUDE_PATH "${libzmq_INCLUDE_DIRS}")
--set(ZMQ_LIB "${monero_pkgcfg_lib_libzmq_zmq}")
-+set(ZMQ_LIB "${monero_ZMQ_LIB}")
- if (monero_SODIUM_LIBRARY)
-   set(SODIUM_LIBRARY "${monero_SODIUM_LIBRARY}")
- else ()' || exit 1
+	git checkout "$RELEASE"
 	[ -d build ] && rm -rf build
 	mkdir build && cd $_ || exit 1
 	cmake -DCMAKE_BUILD_TYPE=Release -DMONERO_SOURCE_DIR=/home/nodo/monero -DMONERO_BUILD_DIR=/home/nodo/monero/build/release .. || exit 1
