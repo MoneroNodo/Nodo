@@ -20,7 +20,7 @@ touch "$DEBUG_LOG"
 project="moneronodo"
 repo="sshui"
 githost="github.com"
-commit_type="release"  # [tag|release]
+commit_type="tag"  # [tag|release]
 get_latest_tag "${project}" "${repo}" "${githost}" "${commit_type}"
 
 {
