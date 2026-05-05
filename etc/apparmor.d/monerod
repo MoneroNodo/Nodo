@@ -1,4 +1,4 @@
-# Last Modified: Fri Nov 28 11:27:36 2025
+# Last Modified: Tue May  5 09:36:41 2026
 include <tunables/global>
 
 # vim:syntax=apparmor
@@ -10,11 +10,15 @@ profile monerod /{home/nodo/bin,usr/bin}/monerod {
   include <abstractions/openssl>
   include <abstractions/private-files-strict>
 
+  capability dac_override,
+
+  /media/monero/ rw,
   /sys/devices/platform/fe150000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/nvme/nvme0/** r,
   owner /media/monero/banlist.txt r,
   owner /media/monero/bitmonero/ rw,
   owner /media/monero/bitmonero/bitmonero.conf r,
   owner /media/monero/bitmonero/bitmonero.log rw,
+  owner /media/monero/bitmonero/lmdb/ rw,
   owner /media/monero/bitmonero/lmdb/data.mdb rw,
   owner /media/monero/bitmonero/lmdb/lock.mdb rwk,
   owner /media/monero/bitmonero/p2pstate.bin{,.unportable} rw,
