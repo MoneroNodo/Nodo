@@ -1,4 +1,4 @@
-# Last Modified: Fri Nov 28 12:22:17 2025
+# Last Modified: Wed May  6 17:42:59 2026
 abi <abi/3.0>,
 
 include <tunables/global>
@@ -7,12 +7,14 @@ include <tunables/global>
   include <abstractions/base>
   include <abstractions/nameservice>
 
+  /home/nodo/ r
   /home/nodo/bin/moneropay mr,
   /proc/sys/net/core/somaxconn r,
   /sys/kernel/mm/transparent_hugepage/hpage_pmd_size r,
   owner /home/nodo/execScripts/db/sqlite3/ r,
   owner /home/nodo/execScripts/db/sqlite3/* r,
   owner /home/nodo/moneropay.sqlite rwk,
+  owner /home/nodo/moneropay.sqlite-journal rwk,
   owner /proc/*/cgroup r,
   owner /proc/*/mountinfo r,
 
