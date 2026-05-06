@@ -23,8 +23,8 @@ profile monerod /{home/nodo/bin,usr/bin}/monerod {
   owner /media/monero/bitmonero/lmdb/lock.mdb rwk,
   owner /media/monero/bitmonero/p2pstate.bin{,.unportable} rw,
   owner /media/monero/bitmonero/poolstate.bin{,.unportable} rw,
-  owner /media/monero/bitmonero/rpc_ssl.crt r,
-  owner /media/monero/bitmonero/rpc_ssl.key r,
+  owner /media/monero/bitmonero/rpc_ssl.crt rw,
+  owner /media/monero/bitmonero/rpc_ssl.key rw,
   owner /tmp/bitmonero.daemon.stdout.stderr rw,
 
 }
