@@ -7,7 +7,7 @@ include <tunables/global>
   include <abstractions/base>
   include <abstractions/nameservice>
 
-  /home/nodo/ r
+  /home/nodo/ r,
   /home/nodo/bin/moneropay mr,
   /proc/sys/net/core/somaxconn r,
   /sys/kernel/mm/transparent_hugepage/hpage_pmd_size r,

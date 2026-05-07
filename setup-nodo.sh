@@ -208,6 +208,8 @@ if [ -f /etc/systemd/system/libretranslate.service ]; then
 	sudo -u nodo rm -rf /home/nodo/.local/share/argos-translate
 fi
 
+systemctl reload apparmor.service
+
 putvar 'zmq_pub' '18083'
 putvar 'tor_port' '18084'
 putvar 'i2p_port' '18085'
