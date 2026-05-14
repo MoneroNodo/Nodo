@@ -5,7 +5,7 @@
 
 uuid="" # TODO some way to get uuid if LUKS
 # If not found then search for regular
-[ -z "$uuid" ] && uuid="$(grep media\\/monero /etc/fstab | cut -d" " -f1 | cut -d= -f2)" # Ugly
+[ -z "$uuid" ] && uuid="$(grep media\\/monero /etc/fstab | cut -d"	" -f1 | cut -d= -f2 | head -n1)" # Ugly
 
 _blkid=$(blkid)
 echo "$_blkid" | grep -q "LABEL=$XMRPARTLABEL" && exit 0 # SSD found
