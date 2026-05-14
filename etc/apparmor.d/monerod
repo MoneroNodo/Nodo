@@ -1,4 +1,4 @@
-# Last Modified: Tue May  5 09:36:41 2026
+# Last Modified: Thu May  7 16:13:25 2026
 include <tunables/global>
 
 # vim:syntax=apparmor
@@ -13,18 +13,20 @@ profile monerod /{home/nodo/bin,usr/bin}/monerod {
   capability dac_override,
 
   /media/monero/ rw,
+  /media/monero/bitmonero/bitmonero.log w,
+  /media/monero/bitmonero/lmdb/data.mdb rw,
+  /media/monero/bitmonero/lmdb/lock.mdb rwk,
   /sys/devices/platform/fe150000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/nvme/nvme0/** r,
-  owner /media/monero/banlist.txt r,
-  owner /media/monero/bitmonero/ rw,
-  owner /media/monero/bitmonero/bitmonero.conf r,
-  owner /media/monero/bitmonero/bitmonero.log rw,
-  owner /media/monero/bitmonero/lmdb/ rw,
-  owner /media/monero/bitmonero/lmdb/data.mdb rw,
-  owner /media/monero/bitmonero/lmdb/lock.mdb rwk,
-  owner /media/monero/bitmonero/p2pstate.bin{,.unportable} rw,
-  owner /media/monero/bitmonero/poolstate.bin{,.unportable} rw,
-  owner /media/monero/bitmonero/rpc_ssl.crt rw,
-  owner /media/monero/bitmonero/rpc_ssl.key rw,
-  owner /tmp/bitmonero.daemon.stdout.stderr rw,
+  /media/monero/banlist.txt r,
+  /media/monero/bitmonero/ rw,
+  /media/monero/bitmonero/bitmonero.conf r,
+  /media/monero/bitmonero/bitmonero.log rw,
+  /media/monero/bitmonero/lmdb/ rw,
+  /media/monero/bitmonero/p2pstate.bin{,.unportable} rw,
+  /media/monero/bitmonero/poolstate.bin{,.unportable} rw,
+  /media/monero/bitmonero/rpc_ssl.crt rw,
+  /media/monero/bitmonero/rpc_ssl.key rw,
+  /tmp/bitmonero.daemon.stdout.stderr rw,
 
 }
+
