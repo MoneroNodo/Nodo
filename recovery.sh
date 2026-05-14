@@ -78,4 +78,9 @@ if [ "$PURGE_BLOCKCHAIN" != "" ]; then
 	rm -rf "$(getvar "data_dir")"/lmdb
 fi
 
+if [ ! -d /media/monero/bitmonero ]; then
+	mkdir -p /media/monero/bitmonero/lmdb
+	chown monero:monero -R /media/monero/bitmonero
+fi
+
 services-start

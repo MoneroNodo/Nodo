@@ -210,6 +210,12 @@ fi
 
 systemctl reload apparmor.service
 
+if [ ! -d /media/monero/bitmonero ]; then
+	mkdir -p /media/monero/bitmonero/lmdb
+	chown monero:monero -R /media/monero/bitmonero
+	systemctl restart monerod.service
+fi
+
 putvar 'zmq_pub' '18083'
 putvar 'tor_port' '18084'
 putvar 'i2p_port' '18085'
