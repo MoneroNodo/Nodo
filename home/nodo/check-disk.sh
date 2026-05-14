@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # shellcheck source=home/nodo/common.sh
-. /home/nodo/common.sh
+. /root/nodo/home/nodo/common.sh
 
 uuid="" # TODO some way to get uuid if LUKS
 # If not found then search for regular
