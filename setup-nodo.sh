@@ -211,9 +211,17 @@ fi
 systemctl reload apparmor.service
 
 if [ ! -d /media/monero/bitmonero ]; then
-	mkdir -p /media/monero/bitmonero/lmdb
-	chown monero:monero -R /media/monero/bitmonero
-	systemctl restart monerod.service
+	if df /media/monero | grep -q 'nvme'; then
+		mkdir -p /media/monero/bitmonero/lmdb
+		chown monero:monero -R /media/monero/bitmonero
+		systemctl restart monerod.service
+	fi
+else
+	if df /media/monero | grep -q 'overlay'; then
+		rm -rf /media/monero
+		bash "$_cwd"/home/nodo/check-disk.sh
+		systemctl restart monerod.service
+	fi
 fi
 
 putvar 'zmq_pub' '18083'
