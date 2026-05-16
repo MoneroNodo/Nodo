@@ -6,7 +6,9 @@
 _found() {
 	mkdir -p /media/monero
 	mount -v /dev/nvme0n1p1 /media/monero
-	makeswap
+	if ! swapon --show | grep -q '/media/monero/swap'; then
+		makeswap
+	fi
 	services-start
 	exit 0
 }
