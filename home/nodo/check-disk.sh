@@ -16,4 +16,4 @@ echo "$_blkid" | grep -q "nvme" || exit 0 # no SSD found at all, nothing to form
 echo "SSD not formatted"
 
 echo "Auto formatting in 5 seconds"
-sleep 5 && . /root/nodo/home/nodo/common.sh && bash /root/nodo/setup-drive.sh
+sleep 5 && . /root/nodo/home/nodo/common.sh && bash /root/nodo/home/nodo/setup-drive.sh

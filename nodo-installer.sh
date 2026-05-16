@@ -88,13 +88,7 @@ systemctl enable --now monero-wallet-rpc
 
 services-start
 sleep 3
-swapfile=/media/monero/swap
-sleep 1
-showtext "Setting up swap on $swapfile"
-dd if=/dev/zero of="$swapfile" bs=1G count=10 conv=sync
-mkswap "$swapfile"
-printf '%s none swap defaults 0 0' "$swapfile" | tee -a /etc/fstab
-swapon "$swapfile"
+makeswap /media/monero/swap
 
 sleep 5
 bash /home/nodo/setup-domains.sh

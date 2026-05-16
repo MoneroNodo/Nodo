@@ -4,6 +4,8 @@ _cwd="$1"
 #shellcheck source=home/nodo/common.sh
 . "${_cwd}"/home/nodo/common.sh
 
+showtext "Stopping services"
+services-stop
 showtext "Formatting SSD..."
 {
 	#Narrows down non-rotational drives with nvme0n1 blockdevice, picks the top one. Hacky but should work.
@@ -14,3 +16,4 @@ showtext "Formatting SSD..."
 	fi
 
 } 2>&1 | tee -a "$DEBUG_LOG"
+services-start

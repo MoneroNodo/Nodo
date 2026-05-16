@@ -97,6 +97,18 @@ gitlab_get_release_commit() {
 	gitlab_get_release_commit_name "$@" | head -n1
 }
 
+makeswap() {
+	swapfile="${1:-/media/monero/swap}"
+	showtext "Setting up swap on $swapfile"
+	dd if=/dev/zero of="$swapfile" bs=1G count=10 conv=sync
+	chmod 0600 "$swapfile"
+	mkswap "$swapfile"
+	if ! grep -q "$swapfile" /etc/fstab; then
+		printf '%s none swap defaults 0 0' "$swapfile" | tee -a /etc/fstab
+	fi
+	swapon "$swapfile"
+}
+
 get_ip() {
 	ip route get 9.9.9.9 | sed -n '/src/{s/.*src *\([^ ]*\).*/\1/p;q}'
 }
@@ -156,6 +168,9 @@ ENCRYPT_FS="0"
 setup_drive() {
 	blockdevice="/dev/$1"
 	fstype="$2"
+	if [ -f /media/monero/swap ]; then
+		swapoff /media/monero/swap
+	fi
 
 	#unmount just in case
 	for f in $(lsblk -o KNAME | grep -e "$1\\d\?"); do
@@ -176,18 +191,16 @@ setup_drive() {
 
 	fi
 	sleep 1
-	#get uuid from block device
-	uuid=$(blkid | grep "$1"p1 | sed 's/.*\sUUID="\([a-z0-9\-]\+\)".*/\1/g')
 	#append new partition to fstab
-	sed "/^UUID=$uuid/d" /etc/fstab
+	sed -i '/\s\/media\/monero\s/d;/^$/d' /etc/fstab
 	#add to fstab
-	printf "\nUUID=%s\t/media/monero\t%s\tdefaults,noatime,nofail,x-systemd.device-timeout=3\t0\t0" "$uuid" "$fstype" | tee -a /etc/fstab
-	#create mountpoint
+	printf "\n/dev/nvme0n1p1\t/media/monero\t%s\tdefaults,noatime,nofail,x-systemd.device-timeout=3\t0\t0\n" "$fstype" | tee -a /etc/fstab
+	systemctl daemon-reload
 	mkdir -p /media/monero
-	#mount
-	mount -v "UUID=$uuid"
-	#correct owner
-	chown monero:monero -R /media/monero
+	if mount -v /dev/nvme0n1p1; then
+		chown monero:monero -R /media/monero
+		makeswap /media/monero/swap
+	fi
 }
 
 getip() {
@@ -221,12 +234,15 @@ log() {
 }
 
 services="monerod monero-lws monero-wallet-rpc moneropay"
+
+#shellcheck disable=SC2068
 services-stop() {
 	for f in ${@:-$services}; do
 		sudo systemctl stop "$f".service
 	done
 }
 
+#shellcheck disable=SC2068
 services-start() {
 	for f in ${@:-$services}; do
 		if systemctl is-enabled "$f".service; then

@@ -216,12 +216,11 @@ if [ ! -d /media/monero/bitmonero ]; then
 		chown monero:monero -R /media/monero/bitmonero
 		systemctl restart monerod.service
 	fi
-else
-	if df /media/monero | grep -q 'overlay'; then
-		rm -rf /media/monero
-		bash "$_cwd"/home/nodo/check-disk.sh
-		systemctl restart monerod.service
-	fi
+fi
+if df /media/monero | grep -q 'overlay'; then
+	rm -rf /media/monero
+	bash "$_cwd"/home/nodo/check-disk.sh
+	systemctl restart monerod.service
 fi
 
 putvar 'zmq_pub' '18083'
