@@ -217,7 +217,7 @@ if [ ! -d /media/monero/bitmonero ]; then
 		systemctl restart monerod.service
 	fi
 fi
-if df /media/monero | grep -q 'overlay'; then
+if ! df /media/monero || df /media/monero | grep -q 'overlay'; then
 	rm -rf /media/monero
 	bash "$_cwd"/home/nodo/check-disk.sh
 	systemctl restart monerod.service
