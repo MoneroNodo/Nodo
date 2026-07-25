@@ -24,8 +24,8 @@ commit_type="tag"  # [tag|release]
 branch="release-v0.3_0.18"
 get_latest_tag "${project}" "${repo}" "${githost}" "${commit_type}"
 
-export RELEASE=48d5f29c1b5ac905a25faa514f544513b7754bdd
-export RELNAME="v0.3_0.18_48d5f29"
+export RELEASE=1e48ef2b087f262a33e1573d91cf75cc46dafe33
+export RELNAME="v0.3_0.18_1e48ef2"
 
 showtext "Building VTNerd Monero-LWS.."
 
