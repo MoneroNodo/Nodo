@@ -1,6 +1,17 @@
 #!/bin/bash
 
+tries=15
+until check_connection; do
+	if [ "$tries" -lt 1 ]; then
+		echo "No internet?"
+		return
+	fi
+	sleep 1
+	tries=$((tries-1))
+done
+
 . "$_cwd"/home/nodo/common.sh
+
 
 cd /media/monero/ || exit 1
 
