@@ -29,8 +29,11 @@ while :; do
 	'-purge')
 		PURGE_BLOCKCHAIN=1
 		;;
-	'-repair')
+	'-devicereset')
 		REPAIR_FILESYSTEM=1
+		;;
+	'-repair')
+		DEVICE_RESET=1
 		;;
 	*)
 		break
@@ -51,7 +54,7 @@ if [ "$REPAIR_FILESYSTEM" != "" ]; then
 		case $_result in
 			1) # runtime error, should be restarted according to manual
 				failcounter=$((failcounter+1))
-				if [ $failcounter -gt 5 ]; then
+				if [ "$failcounter" -gt 5 ]; then
 					bash /home/nodo/setup-drive.sh
 					break 2
 				fi
@@ -81,6 +84,21 @@ fi
 if [ ! -d /media/monero/bitmonero ]; then
 	mkdir -p /media/monero/bitmonero/lmdb
 	chown monero:monero -R /media/monero/bitmonero
+fi
+
+if [ "$DEVICE_RESET" != "" ]; then
+	# reset /root/nodo
+	_git="git --git-dir=/root/nodo/.git --work-tree=/root/nodo"
+	$_git fetch
+	$_git reset --hard origin/master
+	$_git clean -xdf
+	# backup old configs in ~/variables
+	_backdir=/home/nodo/variables-"$(date +%s)"
+	mkdir -p "$_backdir"
+	mv /home/nodo/variables/{config.json,config.merge.json,config_retain.json,,nodoUI.feeds.json,nodoUI.system.json} "$_backdir"
+	cp /root/nodo/home/nodo/variables/config.json /home/nodo/variables/
+	# remove firstboot stuff
+	rm /root/nododaemonfirstboot /home/nodo/variables/firstboot
 fi
 
 services-start
