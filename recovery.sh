@@ -87,18 +87,28 @@ if [ ! -d /media/monero/bitmonero ]; then
 fi
 
 if [ "$DEVICE_RESET" != "" ]; then
+	_backdir=/home/nodo/variables-"$(date +%s)"
+	revert() {
+		set +e
+		mv "$_backdir"/* /home/nodo/variables/
+		rm -rf "$_backdir"
+	}
+	trap revert EXIT INT
+	set -e
 	# reset /root/nodo
 	_git="git --git-dir=/root/nodo/.git --work-tree=/root/nodo"
-	$_git fetch
-	$_git reset --hard origin/master
-	$_git clean -xdf
+	"$_git" fetch
+	"$_git" reset --hard master
+	"$_git" clean -xdf
 	# backup old configs in ~/variables
-	_backdir=/home/nodo/variables-"$(date +%s)"
+
 	mkdir -p "$_backdir"
-	mv /home/nodo/variables/{config.json,config.merge.json,config_retain.json,,nodoUI.feeds.json,nodoUI.system.json} "$_backdir"
+	mv /home/nodo/variables/{config.json,config.merge.json,config_retain.json,nodoUI.feeds.json,nodoUI.system.json} "$_backdir"
 	cp /root/nodo/home/nodo/variables/config.json /home/nodo/variables/
+	set +e
 	# remove firstboot stuff
-	rm /root/nododaemonfirstboot /home/nodo/variables/firstboot
+	rm -f /root/nododaemonfirstboot /home/nodo/variables/firstboot
+	reboot
 fi
 
 services-start
