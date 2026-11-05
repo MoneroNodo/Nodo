@@ -52,25 +52,25 @@ if [ "$REPAIR_FILESYSTEM" != "" ]; then
 		xfs_repair -e "$device"
 		_result=$?
 		case $_result in
-			1) # runtime error, should be restarted according to manual
-				failcounter=$((failcounter+1))
-				if [ "$failcounter" -gt 5 ]; then
-					bash /home/nodo/setup-drive.sh
-					break 2
-				fi
-				continue
-				;;
-			2) # dirty log: mount and unmount, then re-run xfs_repair
-				mount "$uuid"
-				umount "$uuid"
-				continue
-				;;
-			4) # issues were found and fixed
-				break
-				;;
-			*)
-				break
-				;;
+		1) # runtime error, should be restarted according to manual
+			failcounter=$((failcounter + 1))
+			if [ "$failcounter" -gt 5 ]; then
+				bash /home/nodo/setup-drive.sh
+				break 2
+			fi
+			continue
+			;;
+		2) # dirty log: mount and unmount, then re-run xfs_repair
+			mount "$uuid"
+			umount "$uuid"
+			continue
+			;;
+		4) # issues were found and fixed
+			break
+			;;
+		*)
+			break
+			;;
 		esac
 		break
 	done
