@@ -90,8 +90,10 @@ if [ "$DEVICE_RESET" != "" ]; then
 	_backdir=/home/nodo/variables-"$(date +%s)"
 	revert() {
 		set +e
-		mv "$_backdir"/* /home/nodo/variables/
-		rm -rf "$_backdir"
+		if [ -d "$_backdir" ]; then
+			mv "$_backdir"/* /home/nodo/variables/
+			rm -rf "$_backdir"
+		fi
 	}
 	trap revert EXIT INT
 	set -e
@@ -108,7 +110,10 @@ if [ "$DEVICE_RESET" != "" ]; then
 	set +e
 	# remove firstboot stuff
 	rm -f /root/nododaemonfirstboot /home/nodo/variables/firstboot
-	reboot
+	# remove temp backup
+	if [ -d "$_backdir" ]; then
+		rm -rf "$_backdir"
+	fi
 fi
 
 services-start
