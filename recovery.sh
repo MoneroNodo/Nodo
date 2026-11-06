@@ -97,9 +97,9 @@ if [ "$DEVICE_RESET" != "" ]; then
 	set -e
 	# reset /root/nodo
 	_git="git --git-dir=/root/nodo/.git --work-tree=/root/nodo"
-	"$_git" fetch
-	"$_git" reset --hard master
-	"$_git" clean -xdf
+	$_git fetch
+	$_git reset --hard master
+	$_git clean -xdf
 	# backup old configs in ~/variables
 
 	mkdir -p "$_backdir"
