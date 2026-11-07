@@ -7,18 +7,7 @@
 #shellcheck source=home/nodo/common.sh
 . /home/nodo/common.sh
 
-# Run an update just to be sure
-apt-get update --fix-missing -y
-
-# Force Apt to look for and correct any missing dependencies or broken packages when you attempt to install the offending package again. This will install any missing dependencies and repair existing installs
-apt-get install -fy
-
-# Reconfigure any broken or partially configured packages
-dpkg --configure -a
-
-apt clean
-
-apt update
+pkg_upgrade
 
 services-stop
 
