@@ -17,12 +17,15 @@ pkg_upgrade() {
 	trap cleanup EXIT
 	set -e
 
+	dpkg --configure -a --force-confdef --force-confold
+	dpkg --audit || true
+
 	timeout 300 apt-get update
 
 	apt-get \
 		-o Dpkg::Options::="--force-confdef" \
 		-o Dpkg::Options::="--force-confold" \
-		upgrade -y
+		upgrade --fix-missing -y
 	set +e
 	cleanup
 	trap - EXIT
