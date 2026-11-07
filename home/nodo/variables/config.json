@@ -68,13 +68,15 @@
 			"monero": "unset",
 			"lws": "unset",
 			"nodoui": "unset",
-			"pay": "unset"
+			"pay": "unset",
+			"debian": "unset"
 		},
 		"autoupdate": {
 			"nodo": "TRUE",
 			"monero": "TRUE",
 			"lws": "TRUE",
-			"pay": "TRUE"
+			"pay": "TRUE",
+			"debian": "TRUE"
 		}
 	}
 }
