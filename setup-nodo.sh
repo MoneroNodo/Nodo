@@ -35,7 +35,7 @@ touch "$DEBUG_LOG"
 chown nodo "$DEBUG_LOG"
 chmod 777 "$DEBUG_LOG"
 
-_APTGET='DEBIAN_FRONTEND=noninteractive apt -o Dpkg::Options::=--force-confold -o Dpkg::Options::=--force-confdef -y --allow-downgrades --allow-remove-essential --allow-change-held-packages'
+_APTGET='DEBIAN_FRONTEND=noninteractive apt -o Dpkg::Options::=--force-confold -o Dpkg::Options::=--force-confdef -y'
 
 eval "$_APTGET" install apt-transport-https lsb-release curl
 
