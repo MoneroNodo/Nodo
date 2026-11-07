@@ -63,6 +63,7 @@ cd /home/nodo || exit 1
 chown nodo:nodo -R nodoui monero monero-lws
 mkdir -p /home/nodo/bin
 chown nodo:nodo /home/nodo/bin
+bash /root/nodo/update-debian.sh
 sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-pay.sh
 sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-monero.sh && \
 sudo --preserve-env=ALL_PROXY -u nodo bash /home/nodo/update-monero-lws.sh # LWS depends on Monero codebas
