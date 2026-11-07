@@ -58,5 +58,6 @@ showtext "Building VTNerd Monero-LWS.."
 	putvar "versions.lws" "$RELEASE" || exit 1
 	putvar "versions.names.lws" "$_NAME"
 	cd || exit
+	trap - INT EXIT HUP
 } 2>&1 | tee -a "$DEBUG_LOG"
 cd || exit 1

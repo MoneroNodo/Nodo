@@ -117,3 +117,4 @@ if [ "$DEVICE_RESET" != "" ]; then
 fi
 
 services-start
+trap - INT EXIT HUP

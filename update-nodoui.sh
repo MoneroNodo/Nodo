@@ -48,6 +48,7 @@ showtext "Downloading Nodo UI"
 	putvar "versions.names.nodoui" "$_NAME"
 	cd || exit
 	remove
+	trap - INT EXIT HUP
 } 2>&1 | tee -a "$DEBUG_LOG"
 cd || exit 1
 ##End debug log

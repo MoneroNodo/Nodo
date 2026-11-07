@@ -96,3 +96,4 @@ elif [ "${i2phostname}" != "${expectedi2p}" ]; then
 fi
 
 remlockfile
+trap - INT HUP EXIT

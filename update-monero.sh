@@ -55,6 +55,7 @@ showtext "Building Monero..."
 	cp build/release/bin/monero* /home/nodo/bin/ || exit 1
 	putvar "versions.monero" "$RELEASE" || exit 1
 	putvar "versions.names.monero" "$_NAME"
+	trap - INT EXIT HUP
 } 2>&1 | tee -a "$DEBUG_LOG"
 
 # Monero codebase needs to stay because LWS depends on it
