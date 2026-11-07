@@ -6,6 +6,28 @@ DEBUG_LOG=/root/debug.log
 CONFIG_FILE=/home/nodo/variables/config.json
 XMRPARTLABEL="NODO_BLOCKCHAIN"
 
+pkg_upgrade() {
+	export DEBIAN_FRONTEND=noninteractive
+
+	cleanup() {
+		set +e
+		apt-get autoremove -y
+		apt-get autoclean
+	}
+	trap cleanup EXIT
+	set -e
+
+	timeout 300 apt-get update
+
+	apt-get \
+		-o Dpkg::Options::="--force-confdef" \
+		-o Dpkg::Options::="--force-confold" \
+		upgrade -y
+	set +e
+	cleanup
+	trap - EXIT
+}
+
 gitlab_get_tag_commit_name() {
 	project="$(printf '%s' "$1" | sed 's/./\L&/g')"
 	repo="$(printf '%s' "$2" | sed 's/./\L&/g')"
