@@ -53,6 +53,8 @@ include <tunables/global>
   /opt/panfrost/lib/aarch64-linux-gnu/libglapi.so.* mr,
   /run/resolvconf/resolv.conf r,
   /run/udev/data/* r,
+  /run/log/journal/ r,
+  /run/log/journal/** r,
   /sys/bus/ r,
   /sys/class/ r,
   /sys/class/drm/ r,
